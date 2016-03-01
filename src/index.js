@@ -10,10 +10,9 @@ import rootReducer from './reducers';
 const loggerMiddleware = createLogger();
 
 const createStoreWithMiddleware = applyMiddleware(
-	loggerMiddleware,
-
-	//make sure this at last
-	thunkMiddleware
+	//make sure this at first
+	thunkMiddleware,
+	loggerMiddleware
 )(createStore);
 
 const store = createStoreWithMiddleware(rootReducer);
