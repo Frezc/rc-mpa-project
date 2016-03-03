@@ -11,3 +11,5 @@ Base on [react-es6-starter](https://github.com/Frezc/react-es6-starter).
 
 if you run the server. open ```http://localhost:8080```
 else open ```index.html```
+
+**NOTICE**: if you get a error: ```commond not found```. please run ```npm i -g webpack-dev-server```
