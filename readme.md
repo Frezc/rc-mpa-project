@@ -6,6 +6,8 @@ Base on [react-es6-starter](https://github.com/Frezc/react-es6-starter).
 ##Getting Started
 
 1. npm install
-2. ```npm run dev``` for watch mode. ```npm run build``` for production mode
-3. open index.html
-4. add code in src/ or edit index.html and save
+2. ```npm run dev``` for starting dev server. ```npm run debug``` for watch debug mode. ```npm run build``` for production mode
+3. add your code in ```src/```
+
+if you run the server. open ```http://localhost:8080```
+else open ```index.html```
