@@ -1,14 +1,11 @@
 import React, { PropTypes } from 'react';
 
-export default class HelloWorld extends React.Component {
+function HelloWorld(props) {
+	const { text } = props;
 
-	render() {
-		const { text } = this.props;
-
-		return (
-			<div style={styles.text}>{text}</div>
-		);
-	}
+	return (
+		<div style={styles.text}>{text}</div>
+	);
 }
 
 const styles = {
@@ -23,3 +20,5 @@ const styles = {
 HelloWorld.propTypes = {
 	text: PropTypes.string.isRequired
 };
+
+export default HelloWorld;
