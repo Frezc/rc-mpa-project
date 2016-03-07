@@ -12,4 +12,6 @@ Base on [react-es6-starter](https://github.com/Frezc/react-es6-starter).
 if you run the server. open ```http://localhost:8080```
 else open ```index.html```
 
+Project support [redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension), you can use chrome with this extension to debug.
+
 **NOTICE**: if you get a error: ```commond not found```. please run ```npm i -g webpack-dev-server```
