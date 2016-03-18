@@ -5,7 +5,7 @@
 **/
 
 import { combineReducers } from 'redux';
-import { TEXT_CHANGE } from '../actions/actionTypes';
+import { TEXT_CHANGE } from '../constants/actionTypes';
 
 /** reducers **/
 function text (state='Hello World!', action) {
