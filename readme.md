@@ -1,7 +1,4 @@
-React + Webpack + es2015 + Redux
-
-A ```PURE``` React+Redux Project.
-Base on [react-es6-starter](https://github.com/Frezc/react-es6-starter).
+React + Webpack + es2015 + Redux + react-router
 
 ##Getting Started
 
