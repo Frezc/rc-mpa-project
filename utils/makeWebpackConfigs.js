@@ -8,6 +8,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
+const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v')
+
 const BUILD_DIR = path.resolve(__dirname, '../dist')
 const APP_DIR = path.resolve(__dirname, '../src')
 const ROOT_DIR = path.resolve(__dirname, '..')
@@ -22,45 +24,63 @@ const AUTOPREFIXER_BROWSERS = [
   'Safari >= 7.1'
 ]
 
-const baseConfig = {
-  output: {
-    path: BUILD_DIR,
-    filename: '[name].js'
-  },
+/**
+ * 设置webpack输出信息
+ */
+function getStats(isDebug) {
+  return {
+    colors: true,
+      reasons: isDebug,
+      hash: isVerbose,
+      version: isVerbose,
+      timings: true,
+      chunks: isVerbose,
+      chunkModules: isVerbose,
+      cached: isVerbose,
+      cachedAssets: isVerbose,
+  }
+}
 
-  module: {
-    loaders: [{
-      test: /\.js?/,
-      exclude: /node_modules/,
-      loaders: ['react-hot', 'babel']
-    }, {
-      test: /\.(scss|css)$/,
-      // exclude: /node_modules/,
-      loaders: ExtractTextPlugin.extract('style', ['css', 'postcss', 'sass'])
-    }, {
-      test: /\.(svg|woff([\?]?.*)|ttf([\?]?.*)|eot([\?]?.*)|svg([\?]?.*))$/i,
-      loader: 'url-loader?limit=10000'
-    }, {
-      test: /\.(png|jpg)$/,
-      loader: 'url?limit=8192'
-    }]
-  },
+function getBaseConfig(prod) {
+  return {
+    output: {
+      path: BUILD_DIR,
+      filename: '[name].js'
+    },
 
-  postcss: [autoprefixer({ browsers: AUTOPREFIXER_BROWSERS })],
+    module: {
+      loaders: [{
+        test: /\.js?/,
+        exclude: /node_modules/,
+        loaders: prod ? ['babel'] : ['react-hot', 'babel']
+      }, {
+        test: /\.(scss|css)$/,
+        loaders: ExtractTextPlugin.extract('style', ['css', 'postcss', 'sass'])
+      }, {
+        test: /\.(svg|woff([\?]?.*)|ttf([\?]?.*)|eot([\?]?.*)|svg([\?]?.*))$/i,
+        loader: 'url-loader?limit=10000'
+      }, {
+        test: /\.(png|jpg)$/,
+        loader: 'url?limit=8192'
+      }]
+    },
 
-  plugins: [
-    new webpack.NoErrorsPlugin(),
-    new webpack.DllReferencePlugin({
-      context: ROOT_DIR,
-      manifest: require('../dist/vendor.json')
-    }),
-    new AddAssetHtmlPlugin({
-      filepath: 'maintain/dist/vendor.js',
-      includeSourcemap: false,
-      hash: true
-    }),
-    new ExtractTextPlugin('[name].css')
-  ]
+    postcss: [autoprefixer({ browsers: AUTOPREFIXER_BROWSERS })],
+
+    plugins: [
+      new webpack.NoErrorsPlugin(),
+      new webpack.DllReferencePlugin({
+        context: ROOT_DIR,
+        manifest: require('../dist/vendor.json')
+      }),
+      new AddAssetHtmlPlugin({
+        filepath: 'dist/vendor.js',
+        includeSourcemap: false,
+        hash: true
+      }),
+      new ExtractTextPlugin('[name].css')
+    ]
+  }
 }
 
 const prodPlugins = [
@@ -94,9 +114,9 @@ function getDllConfig(prod) {
   ]
   if (prod) {
     plugins.push(
-      new webpack.NoErrorsPlugin(),
-      ...prodPlugins
+      new webpack.NoErrorsPlugin()
     )
+    prodPlugins.map(plugin => plugins.push(plugin))
   }
   return {
     entry: {
@@ -107,12 +127,14 @@ function getDllConfig(prod) {
       filename: '[name].js',
       library: '[name]_[chunkhash]'
     },
-    plugins: plugins
+    plugins: plugins,
+    stats: getStats(!prod)
   }
 }
 
 function getMainConfig(pages, prod) {
   if (pages && pages.length > 0) {
+    const baseConfig = getBaseConfig()
     var c = Object.assign({}, baseConfig, {
       entry: pages.reduce(function (pre, cur) {
         pre[cur] = APP_DIR + `/${cur}.js`
@@ -125,7 +147,8 @@ function getMainConfig(pages, prod) {
           hash: true,
           chunks: [page]
         })
-      ))
+      )),
+      stats: getStats(!prod)
     })
     if (prod) {
       Object.assign(c, {
@@ -137,6 +160,9 @@ function getMainConfig(pages, prod) {
     } else {
       c['devtool'] = 'eval'
     }
+    return c
+  } else {
+    throw new TypeError('Entry cannot be empty')
   }
 }
 

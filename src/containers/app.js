@@ -18,7 +18,7 @@ class App extends React.Component {
 	    		text={text} />
 	    	<input 
 	    		type="text" 
-	    		defaultValue="Hello World!" 
+	    		defaultValue="Hello World!"
 	    		onChange={e => dispatch(textChange(e.target.value))}/>
     	</div>
     );
