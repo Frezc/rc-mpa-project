@@ -1,24 +1,27 @@
 /** state tree
-	{
-		text: 'Hello World!'
-	}
-**/
+ {
+   router,
+   todoList: [{
+     name: string,
+     completed: bool
+   }]
+ }
+ **/
 
-import { combineReducers } from 'redux';
-import { TEXT_CHANGE } from '../constants/actionTypes';
+import { combineReducers } from "redux";
+import { routerReducer as router } from 'react-router-redux';
 
 /** reducers **/
-function text (state='Hello World!', action) {
-	switch(action.type) {
-		case TEXT_CHANGE:
-			return action.text;
-		default:
-			return state;
-	}
+function todoList (state = [], action) {
+  switch (action.type) {
+
+  }
+  return state
 }
 
 const rootRuducer = combineReducers({
-	text
+  todoList,
+  router
 });
 
 export default rootRuducer;

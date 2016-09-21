@@ -55,7 +55,7 @@ function getBaseConfig(prod) {
         loaders: prod ? ['babel'] : ['react-hot', 'babel']
       }, {
         test: /\.(scss|css)$/,
-        loaders: ExtractTextPlugin.extract('style', ['css', 'postcss', 'sass'])
+        loader: prod ? ExtractTextPlugin.extract('style', ['css', 'postcss', 'sass']) : 'style!css!postcss!sass'
       }, {
         test: /\.(svg|woff([\?]?.*)|ttf([\?]?.*)|eot([\?]?.*)|svg([\?]?.*))$/i,
         loader: 'url-loader?limit=10000'
@@ -134,7 +134,7 @@ function getDllConfig(prod) {
 
 function getMainConfig(pages, prod) {
   if (pages && pages.length > 0) {
-    const baseConfig = getBaseConfig()
+    const baseConfig = getBaseConfig(prod)
     var c = Object.assign({}, baseConfig, {
       entry: pages.reduce(function (pre, cur) {
         pre[cur] = APP_DIR + `/${cur}.js`
@@ -145,7 +145,8 @@ function getMainConfig(pages, prod) {
           filename: `${page}.html`,
           template: APP_DIR + `/templates/${page}.html`,
           hash: true,
-          chunks: [page]
+          chunks: [page],
+          cache: true
         })
       )),
       stats: getStats(!prod)

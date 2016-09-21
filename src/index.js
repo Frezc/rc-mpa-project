@@ -1,20 +1,21 @@
-import React from 'react';
-import {
-    render
-}
-from 'react-dom';
-import App from './containers/app';
-import {
-    Provider
-}
-from 'react-redux';
-import configureStore from './configs/configureStore';
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { Router, hashHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
+import configureStore from "./configs/configureStore";
+import { routes } from './configs/routes';
 
 const store = configureStore();
+const history = syncHistoryWithStore(hashHistory, store, {
+  selectLocationState: state => state.router
+});
 
 render(
-    <Provider store={store}>
-		<App />
-	</Provider>,
-    document.getElementById('app')
+  <Provider store={store}>
+    <Router history={history}>
+      {routes}
+    </Router>
+  </Provider>,
+  document.getElementById('main')
 );
