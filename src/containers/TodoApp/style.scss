@@ -48,10 +48,10 @@
         border: 1px solid transparent;
         padding: 3px 7px;
         cursor: pointer;
+        border-radius: 4px;
 
         &:hover {
           border-color: rgba(175, 47, 47, 0.1);
-          border-radius: 4px;
         }
 
         &.selected {
