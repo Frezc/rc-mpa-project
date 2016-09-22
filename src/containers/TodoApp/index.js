@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './style.scss';
 
 import TodoCheck from '../../components/TodoCheck';
-import { addTodo, setTodoStatus, deleteTodo, clearTodo } from '../../actions/todoApp'
+import { addTodo, setTodoStatus, deleteTodo, clearTodo, loadLocal } from '../../actions/todoApp'
 
 const FILTER_STATUS = [{
   text: 'All',
@@ -35,7 +35,11 @@ class TodoApp extends React.Component {
     })
   }
 
-  render () {
+  componentDidMount () {
+    this.props.dispatch(loadLocal())
+  }
+
+  renderApp () {
   	const { dispatch, todoList } = this.props;
     const { newTodo, activeFilter } = this.state
 
@@ -48,7 +52,7 @@ class TodoApp extends React.Component {
           value={newTodo}
 	    		onChange={e => this.setState({ newTodo: e.target.value })}
           onKeyDown={e => {
-            if (e.which === 13) {
+            if (e.which === 13 && newTodo) {
               dispatch(addTodo(newTodo))
               this.setState({ newTodo: '' })
             }
@@ -68,13 +72,17 @@ class TodoApp extends React.Component {
                 >
                   {item.name}
                 </label>
+                <span className="delete" onClick={() => dispatch(deleteTodo(index))}>x</span>
+                {/*<textarea className="edit-input"  />*/}
               </li>
             )}
           </ul>
         </section>
         {todoList.length > 0 &&
           <footer className="menu">
-            <span className="left-text">{todoList.filter(todo => !todo.completed).length} item left</span>
+            <span className="left-text">
+              <strong>{todoList.filter(todo => !todo.completed).length}</strong> item left
+            </span>
             <div className="filter">
               {FILTER_STATUS.map(filter =>
                 <span
@@ -86,11 +94,30 @@ class TodoApp extends React.Component {
                 </span>
               )}
             </div>
-            <span className="right-text">Clear completed</span>
+            <span className="right-text" onClick={() => dispatch(clearTodo())}>Clear completed</span>
           </footer>
         }
     	</div>
     );
+  }
+
+  render () {
+    return (
+      <div style={styles.root}>
+        {this.renderApp()}
+        {/*<p style={{ color: '#bfbfbf', marginTop: 48 }}>Double-click to edit a todo</p>*/}
+      </div>
+    )
+  }
+}
+
+const styles = {
+  root: {
+    backgroundColor: '#f5f5f5',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 16
   }
 }
 

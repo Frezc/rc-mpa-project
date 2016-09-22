@@ -10,11 +10,11 @@
 
 import { combineReducers } from "redux";
 import { routerReducer as router } from 'react-router-redux';
-import { TODO_ADD, TODO_SET, TODO_DELETE, TODO_CLEAR } from '../actions/todoApp'
+import { TODO_ADD, TODO_SET, TODO_DELETE, TODO_CLEAR, TODO_LOAD } from '../actions/todoApp'
 
 /** reducers **/
 function todoList (state = [], action) {
-  const { index, completed, name } = action.payload || {}
+  const { index, completed, name, todoList } = action.payload || {}
 
   switch (action.type) {
     case TODO_ADD:
@@ -30,6 +30,8 @@ function todoList (state = [], action) {
       return state.filter((todo, i) => i != index)
     case TODO_CLEAR:
       return state.filter((todo, i) => todo.completed != completed)
+    case TODO_LOAD:
+      return todoList
   }
   return state
 }

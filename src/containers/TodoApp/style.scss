@@ -1,7 +1,9 @@
 .todo-app {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
   0 25px 50px 0 rgba(0, 0, 0, 0.1);
-  width: 550px;
+  width: 100%;
+  min-width: 450px;
+  max-width: 700px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -34,6 +36,11 @@
     .right-text {
       position: absolute;
       right: 12px;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .filter {
@@ -71,6 +78,37 @@
         padding: 15px 15px 15px 60px;
         font-size: 24px;
         border-bottom: 1px solid #ededed;
+        position: relative;
+
+        .delete {
+          display: none;
+          position: absolute;
+          right: 0;
+          top: 6px;
+          width: 40px;
+          height: 40px;
+          text-align: center;
+          line-height: 40px;
+          color: #cc9a9a;
+          cursor: pointer;
+
+          &:hover {
+            color: #af5b5e;
+          }
+        }
+
+        &:hover .delete {
+          display: block;
+        }
+
+        .edit-input {
+          position: absolute;
+          outline: none;
+          border: none;
+          resize: none;
+          background-color: transparent;
+          font-size: 24px;
+        }
       }
     }
 
