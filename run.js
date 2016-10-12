@@ -3,6 +3,7 @@
  */
 const del = require('del')
 const webpack = require('webpack')
+const configs = require('./utils/configs')
 
 const tasks = new Map()
 
@@ -30,10 +31,10 @@ tasks.set('clean', () => del(['dist/*']))
 
 tasks.set('bundle', () => {
   const Configs = require('./utils/makeWebpackConfigs')
-  // console.log(runWebpack(Configs.getMainConfig(['index'], true)))
   return Promise.resolve()
-      .then(() => runWebpack(Configs.getDllConfig(true)))
-      .then(() => runWebpack(Configs.getMainConfig(['index'], true)))
+    .then(() => runWebpack(Configs.getDllConfig(configs.libs, true)))
+    .then(() => runWebpack(Configs.getMainConfig(configs.pages, true)))
+    .then(() => del(['dist/vendor.json']))
 })
 
 tasks.set('build', () => {

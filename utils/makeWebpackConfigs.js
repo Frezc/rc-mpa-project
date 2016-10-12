@@ -104,7 +104,7 @@ const prodPlugins = [
 /**
  * 生成dll的配置
  */
-function getDllConfig(prod) {
+function getDllConfig(libs, prod) {
   const plugins = [
     new webpack.DllPlugin({
       path: path.join(BUILD_DIR, '[name].json'),
@@ -120,7 +120,7 @@ function getDllConfig(prod) {
   }
   return {
     entry: {
-      vendor: ['react', 'react-dom', 'babel-polyfill']
+      vendor: libs
     },
     output: {
       path: BUILD_DIR,
