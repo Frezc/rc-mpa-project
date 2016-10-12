@@ -2,6 +2,8 @@ React + Webpack + es2015 + Redux + react-router
 
 ##Getting Started
 
+[**notice**] Make sure that you have Node.js v6 or newer installed on your machine.
+
 ```
 npm i
 
