@@ -5,7 +5,8 @@
 const host = '/api_proxy/';
 
 const api = {
-  auth: host + 'auth'
+  auth: host + 'auth',
+  refresh: host + 'refresh'
 };
 
 export default api;

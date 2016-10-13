@@ -4,8 +4,17 @@
 import React from 'react';
 import AppHeader from '../../components/AppHeader';
 import { Menu, Icon } from 'antd';
+import auth from '../../helpers/jwtAuth';
+import { connect } from 'react-redux';
+import { replace } from 'react-router-redux';
 
 class NavContainer extends React.Component {
+
+  componentWillMount() {
+    if (!auth.check()) {
+      this.props.dispatch(replace('/login'));
+    }
+  }
 
   render() {
     return (
@@ -13,10 +22,14 @@ class NavContainer extends React.Component {
         <AppHeader
 
         />
-        <Icon name="email" />
+        <Icon name="email"/>
       </div>
     )
   }
 }
 
-export default NavContainer
+function select(state) {
+  return {}
+}
+
+export default connect(select)(NavContainer);

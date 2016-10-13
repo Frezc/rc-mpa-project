@@ -5,8 +5,11 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Form, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
-import { easyPost } from '../../helpers';
-import api from '../../configs/api'
+import auth from '../../helpers/jwtAuth';
+import isEmail from 'validator/lib/isEmail';
+import isLength from 'validator/lib/isLength';
+import { setLogonUser } from '../../actions/user';
+import { replace } from 'react-router-redux';
 
 import './style.scss'
 
@@ -18,18 +21,63 @@ class LoginPage extends PureComponent {
 
   state = {
     email: '',
-    password: ''
+    password: '',
+    error: {},
+    loading: false
+  }
+
+  validate() {
+    const { email, password } = this.state
+    const error = {};
+    let isPassed = true;
+    if (!isEmail(email)) {
+      error['email'] = {
+        validateStatus: 'error',
+        help: '请输入合法的邮箱地址'
+      }
+      isPassed = false;
+    }
+
+    if (!isLength(password, { min: 6 })) {
+      error['password'] = {
+        validateStatus: 'error',
+        help: '密码不能少于6位'
+      }
+      isPassed = false;
+    }
+
+    this.setState({ error });
+    return isPassed;
   }
 
   handleSubmit = (e) => {
     const { email, password } = this.state
     e.preventDefault();
 
-    easyPost(api.auth, { email, password });
+    if (this.validate()) {
+      this.setState({ loading: true });
+      auth.fetchAuth(email, password)
+        .then(json => {
+          this.props.dispatch(setLogonUser(json.user));
+          this.props.dispatch(replace('/maintain'));
+        })
+        .catch(errorMsg => {
+          if (errorMsg.error) {
+            this.setState({ error: errorMsg.error });
+          }
+        })
+        .then(() => this.setState({ loading: false }));
+    }
+  }
+
+  componentWillMount() {
+    if (auth.check()) {
+      this.props.dispatch(replace('/maintain'));
+    }
   }
 
   render() {
-    const { email, password } = this.state
+    const { email, password, error, loading } = this.state;
 
     return (
       <div className="login-page">
@@ -41,6 +89,8 @@ class LoginPage extends PureComponent {
           <Form vertical onSubmit={this.handleSubmit}>
             <FormItem
               label="邮箱"
+              hasFeedback
+              {...(error['email'] || {})}
             >
               <Input
                 placeholder="请输入邮箱"
@@ -50,6 +100,8 @@ class LoginPage extends PureComponent {
             </FormItem>
             <FormItem
               label="密码"
+              hasFeedback
+              {...(error['password'] || {})}
             >
               <Input
                 type="password"
@@ -58,7 +110,7 @@ class LoginPage extends PureComponent {
                 onChange={e => this.setState({ password: e.target.value })}
               />
             </FormItem>
-            <Button type="primary" htmlType="submit" className="submit">登录</Button>
+            <Button type="primary" htmlType="submit" className="submit" loading={loading}>登录</Button>
           </Form>
         </div>
       </div>

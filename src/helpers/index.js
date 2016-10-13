@@ -61,6 +61,11 @@ export function easyFetch(url, params) {
         } else {
           return response.json().then(json => {
             const errorMsg = { status: response.status, message: json.error };
+            if (errorMsg.status == 400) {
+              Object.keys(json.error)
+              errorMsg.error = resolveInputError(json.error);
+              errorMsg.message = 'Invalid parameters!';
+            }
             message.error(`Error[${errorMsg.status}]: ${errorMsg.message}`);
             rej(errorMsg);
           })
@@ -71,6 +76,20 @@ export function easyFetch(url, params) {
         rej({ message: 'Unexpected error!' });
       });
   })
+}
+
+/**
+ * @param error obj { [name]: ['error1', 'error2'], ... }
+ * @returns obj { [name]: { validateStatus: 'error', help: 'error1 error2' }, ... }
+ */
+function resolveInputError(error) {
+  return Object.entries(error).reduce((obj, entry) => {
+    obj[entry[0]] = {
+      validateStatus: 'error',
+      help: entry[1].join(' ')
+    };
+    return obj;
+  }, {});
 }
 
 /**

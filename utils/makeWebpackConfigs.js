@@ -86,6 +86,7 @@ function getBaseConfig(prod) {
         '/api_proxy': {
           target: 'http://tjz.frezc.com',
           secure: false,
+          changeOrigin: true,
           pathRewrite: {'^/api_proxy' : ''}
         }
       }
