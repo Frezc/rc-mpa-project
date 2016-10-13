@@ -3,17 +3,22 @@
  */
 import React from 'react'
 import { Route, IndexRedirect } from 'react-router'
-import AppList from '../containers/AppList'
-import TodoApp from '../containers/TodoApp'
+import NavContainer from '../containers/NavContainer'
+import LoginPage from '../containers/LoginPage'
 
 export const routes = (
   <Route
     path="/"
-    component={AppList}
   >
-    <Route
-      path="todo-app"
-      component={TodoApp}
+    <IndexRedirect to="maintain" />
+    <Route 
+      path="login"
+      component={LoginPage}
     />
+    <Route
+      path="maintain"
+      component={NavContainer}
+    >
+    </Route>
   </Route>
 )

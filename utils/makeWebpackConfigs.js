@@ -79,7 +79,17 @@ function getBaseConfig(prod) {
         hash: true
       }),
       new ExtractTextPlugin('[name].css')
-    ]
+    ],
+
+    devServer: {
+      proxy: {
+        '/api_proxy': {
+          target: 'http://tjz.frezc.com',
+          secure: false,
+          pathRewrite: {'^/api_proxy' : ''}
+        }
+      }
+    }
   }
 }
 
@@ -89,7 +99,8 @@ const prodPlugins = [
     compress: {
       unused: true,
       dead_code: true,
-      warnings: false
+      warnings: false,
+      drop_console: true
     },
     comments: false
   }),

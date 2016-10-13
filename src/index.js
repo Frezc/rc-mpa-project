@@ -3,10 +3,11 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import configureStore from "./configs/configureStore";
+// import configureStore from "./configs/configureStore";
+import store from './configs/store'
 import { routes } from './configs/routes';
 
-const store = configureStore();
+// const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store, {
   selectLocationState: state => state.router
 });

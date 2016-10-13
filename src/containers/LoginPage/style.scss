@@ -1,0 +1,30 @@
+.login-page {
+  padding: 64px;
+
+  .title {
+    width: 360px;
+    margin: auto;
+    color: darkgrey;
+    text-align: center;
+
+    .title-icon {
+      font-size: 25px;
+      margin-right: 16px;
+    }
+
+    .title-text {
+      font-size: 24px;
+    }
+  }
+
+  .input-box {
+    width: 360px;
+    margin: 48px auto auto;
+
+    .submit {
+      width: 100px;
+      display: block;
+      margin: auto;
+    }
+  }
+}
