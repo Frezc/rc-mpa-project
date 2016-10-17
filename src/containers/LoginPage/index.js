@@ -5,11 +5,11 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Form, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
-import auth from '../../helpers/jwtAuth';
+import auth from '../../network/jwtAuth';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
 import { setLogonUser } from '../../actions/user';
-import { replace } from 'react-router-redux';
+import { push } from 'react-router-redux';
 
 import './style.scss'
 
@@ -54,25 +54,29 @@ class LoginPage extends PureComponent {
     const { email, password } = this.state
     e.preventDefault();
 
+    window.auth = auth
+
     if (this.validate()) {
       this.setState({ loading: true });
       auth.fetchAuth(email, password)
         .then(json => {
-          this.props.dispatch(setLogonUser(json.user));
-          this.props.dispatch(replace('/maintain'));
+          // this.props.dispatch(setLogonUser(json.user));
+          this.props.dispatch(push('/maintain'));
         })
         .catch(errorMsg => {
+          const newState = {};
           if (errorMsg.error) {
-            this.setState({ error: errorMsg.error });
+            newState['error'] = errorMsg.error;
           }
+          newState['loading'] = false;
+          this.setState(newState);
         })
-        .then(() => this.setState({ loading: false }));
     }
   }
 
   componentWillMount() {
     if (auth.check()) {
-      this.props.dispatch(replace('/maintain'));
+      this.props.dispatch(push('/maintain'));
     }
   }
 

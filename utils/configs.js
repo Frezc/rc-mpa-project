@@ -13,6 +13,7 @@ module.exports = {
     'react-router-redux',
     'redux',
     'redux-logger',
-    'redux-thunk'
+    'redux-thunk',
+    'validator'
   ]
 }

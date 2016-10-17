@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config=./utils/dev-config.js --port=8080 --hot --inline",
+    "dev": "webpack-dev-server --config=./utils/dev-config.js --port=7991 --hot --inline",
     "dev-dll": "webpack --config=./utils/dll-config.js",
     "debug": "webpack --config=./utils/dev-config.js",
     "build": "node run build"

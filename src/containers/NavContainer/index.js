@@ -4,7 +4,7 @@
 import React from 'react';
 import AppHeader from '../../components/AppHeader';
 import { Menu, Icon } from 'antd';
-import auth from '../../helpers/jwtAuth';
+import auth from '../../network/jwtAuth';
 import { connect } from 'react-redux';
 import { replace } from 'react-router-redux';
 

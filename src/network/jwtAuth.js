@@ -4,4 +4,5 @@
 import Auth from './Auth';
 import api from '../configs/api'
 
-export default new Auth({ auth: api.auth, refresh: api.refresh });
+const jwtAuth = new Auth({ auth: api.auth, refresh: api.refresh });
+export default jwtAuth;
