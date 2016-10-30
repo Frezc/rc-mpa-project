@@ -61,7 +61,7 @@ class LoginPage extends PureComponent {
       auth.fetchAuth(email, password)
         .then(json => {
           // this.props.dispatch(setLogonUser(json.user));
-          this.props.dispatch(push('/maintain'));
+          this.props.dispatch(push('/m'));
         })
         .catch(errorMsg => {
           const newState = {};

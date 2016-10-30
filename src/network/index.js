@@ -5,6 +5,9 @@ import { message } from 'antd';
 import fetch from 'isomorphic-fetch';
 import { constructQuery, constructFormData } from '../helpers';
 import auth from './jwtAuth';
+import api from './api';
+
+export { api };
 
 /**
  * fetch with auto retry
@@ -73,9 +76,13 @@ export async function easyFetch(url, params, needAuth = true) {
               if (errorMsg.status == 429) {
                 errorMsg.message = '请求过于频繁，喝杯咖啡休息一分钟吧。';
               }
-              if (errorMsg.status == 401 && errorMsg.message == 'token_expired') {
-                auth.needRefresh = true;
-                return res(easyFetch(url, params, needAuth));
+              if (errorMsg.status == 401) {
+                if (errorMsg.message == 'token_expired') {
+                  auth.needRefresh = true;
+                  return res(easyFetch(url, params, needAuth));
+                } else {
+                  auth.toLogin();
+                }
               }
               message.error(`Error[${errorMsg.status}]: ${errorMsg.message}`);
               rej(errorMsg);
@@ -96,7 +103,7 @@ export async function easyFetch(url, params, needAuth = true) {
  */
 function readData(response) {
   const contentType = response.headers.get("content-type");
-  if(contentType && contentType.indexOf("application/json") !== -1) {
+  if (contentType && contentType.indexOf("application/json") !== -1) {
     return response.json();
   } else {
     return response.text();

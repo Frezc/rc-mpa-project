@@ -1,0 +1,22 @@
+.main-page {
+  min-width: 400px;
+  height: 100%;
+  background-color: #ececec;
+  display: flex;
+  flex-direction: column;
+
+  .content-with-menu {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+
+    .main-content {
+      flex: 1;
+      overflow: auto;
+    }
+  }
+
+  .ant-table-row {
+    background-color: white;
+  }
+}

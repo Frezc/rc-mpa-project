@@ -5,6 +5,7 @@ import { easyPost, easyGet } from './index';
 import { message } from 'antd';
 import store from '../configs/store';
 import { push } from 'react-router-redux';
+import { setLogonUser } from '../actions/user';
 
 class Auth {
 
@@ -27,9 +28,13 @@ class Auth {
     if (this.needRefresh) {
       return await this.refreshAuth();
     } else {
-      const { token, user } = this;
-      return { token, user };
+      return this.getAuthSync();
     }
+  }
+
+  getAuthSync() {
+    const { token, user } = this;
+    return { token, user };
   }
 
   saveAuth({ token = this.token, user = this.user }) {
@@ -54,15 +59,25 @@ class Auth {
     return !!this.token;
   }
 
+  toLogin() {
+    localStorage.removeItem(this.__tk__);
+    localStorage.removeItem(this.__uk__);
+    this.token = null;
+    store.dispatch(push('/login'));
+  }
+
+  authSuccess(json) {
+    this.saveAuth(json);
+    this.needRefresh = false;
+    store.dispatch(setLogonUser(json.user));
+    return json;
+  }
+
   fetchAuth(email, password) {
     const authUrl = this.urls.auth;
     if (authUrl) {
       return Promise.resolve(easyPost(authUrl, { email, password }, false))
-        .then(json => {
-          this.saveAuth(json);
-          this.needRefresh = false;
-          return json;
-        })
+        .then(json => this.authSuccess(json))
     } else {
       return Promise.reject({ message: 'Unset fetch url!' });
     }
@@ -73,17 +88,11 @@ class Auth {
     if (!this.token) return Promise.reject({ message: '请先登录!' });
     if (!refreshUrl) return Promise.reject({ message: 'Unset refresh url!' });
     return Promise.resolve(easyGet(refreshUrl, { token: this.token }, false))
-      .then(json => {
-        this.saveAuth(json.token);
-        this.needRefresh = false;
-        return json;
-      })
+      .then(json => this.authSuccess(json))
       .catch(errorMsg => {
         if (errorMsg.status == 400) {
           message.error('身份验证已过期，请重新登录。');
-          localStorage.removeItem(this.__tk__);
-          localStorage.removeItem(this.__uk__);
-          store.dispatch(push('/login'));
+          this.toLogin();
         }
         throw errorMsg;
       })
