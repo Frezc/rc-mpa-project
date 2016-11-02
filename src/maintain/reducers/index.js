@@ -8,7 +8,7 @@
 import { combineReducers } from "redux";
 import { routerReducer as router } from 'react-router-redux';
 import { SET_LOGON_USER } from '../actions/user';
-import auth from '../network/jwtAuth';
+import auth from '../configs/jwtAuth';
 
 /** reducers **/
 function logonUser(state = auth.getAuthSync().user, action) {

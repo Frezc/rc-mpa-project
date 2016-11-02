@@ -5,7 +5,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Form, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
-import auth from '../../network/jwtAuth';
+import auth from '../../configs/jwtAuth';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
 import { setLogonUser } from '../../actions/user';
@@ -76,7 +76,7 @@ class LoginPage extends PureComponent {
 
   componentWillMount() {
     if (auth.check()) {
-      this.props.dispatch(push('/maintain'));
+      this.props.dispatch(push('/m'));
     }
   }
 

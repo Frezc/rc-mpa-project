@@ -3,11 +3,12 @@
  */
 import { easyPost, easyGet } from './index';
 import { message } from 'antd';
-import store from '../configs/store';
-import { push } from 'react-router-redux';
-import { setLogonUser } from '../actions/user';
+import EventEmitter from 'events';
 
-class Auth {
+/**
+ * events: ['fetched', 'needAuth']
+ */
+class Auth extends EventEmitter {
 
   token = null;
   user = {};
@@ -20,6 +21,7 @@ class Auth {
   __uk__ = btoa('__UK__SIGNIFICANCE__').slice(0, 16);
 
   constructor({ auth, refresh, unauth }) {
+    super();
     this.urls = { auth, refresh, unauth };
     this.loadAuthFromLocal();
   }
@@ -51,7 +53,7 @@ class Auth {
       this.token = atob(token);
       this.user = JSON.parse(decodeURIComponent(atob(user)));
     } else {
-      store.dispatch(push('/login'));
+      this.toLogin();
     }
   }
 
@@ -63,13 +65,13 @@ class Auth {
     localStorage.removeItem(this.__tk__);
     localStorage.removeItem(this.__uk__);
     this.token = null;
-    store.dispatch(push('/login'));
+    this.emit('needAuth');
   }
 
   authSuccess(json) {
     this.saveAuth(json);
     this.needRefresh = false;
-    store.dispatch(setLogonUser(json.user));
+    this.emit('fetched', json);
     return json;
   }
 

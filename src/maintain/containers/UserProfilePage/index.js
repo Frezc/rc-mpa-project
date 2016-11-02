@@ -4,7 +4,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'antd';
-import { api, easyGet } from '../../network';
+import { api, easyGet } from '../../../network';
 
 class UserProfilePage extends PureComponent {
 
@@ -44,7 +44,6 @@ class UserProfilePage extends PureComponent {
   }
 
   render() {
-    const {} = this.props;
     const { loading, list, total } = this.state;
 
     return (
@@ -72,7 +71,7 @@ const columns = [{
   title: 'Id',
   dataIndex: 'id',
   key: 'id',
-  width: 32
+  width: 64
 }, {
   title: 'Avatar',
   dataIndex: 'avatar',
@@ -107,7 +106,7 @@ const columns = [{
 
 function select(state, ownProps) {
   return {
-    router: state.router
+    location: state.router.locationBeforeTransitions
   }
 }
 

@@ -4,7 +4,7 @@
 import { message } from 'antd';
 import fetch from 'isomorphic-fetch';
 import { constructQuery, constructFormData } from '../helpers';
-import auth from './jwtAuth';
+import auth from '../maintain/configs/jwtAuth';
 import api from './api';
 
 export { api };

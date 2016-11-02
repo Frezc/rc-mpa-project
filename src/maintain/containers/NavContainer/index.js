@@ -2,11 +2,11 @@
  * Created by Frezc on 2016/10/12.
  */
 import React from 'react';
-import AppHeader from '../../components/AppHeader';
+import AppHeader from '../../../components/AppHeader';
 import { Menu, Icon } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
-import auth from '../../network/jwtAuth';
+import auth from '../../configs/jwtAuth';
 import { connect } from 'react-redux';
 import { replace, push } from 'react-router-redux';
 

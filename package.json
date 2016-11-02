@@ -4,16 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config=./utils/dev-config.js --port=7991 --hot --inline",
+    "dev": "node run dev",
     "dev-dll": "webpack --config=./utils/dll-config.js",
-    "debug": "webpack --config=./utils/dev-config.js",
-    "build": "node run build"
+    "debug": "node run debug",
+    "build": "node run build",
+    "clean": "node run clean"
   },
   "author": "frezc",
   "license": "MIT",
   "dependencies": {
     "antd": "^2.0.1",
     "babel-polyfill": "^6.13.0",
+    "events": "^1.1.1",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.3.1",
     "react-dom": "^15.3.0",

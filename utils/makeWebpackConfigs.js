@@ -30,14 +30,14 @@ const AUTOPREFIXER_BROWSERS = [
 function getStats(isDebug) {
   return {
     colors: true,
-      reasons: isDebug,
-      hash: isVerbose,
-      version: isVerbose,
-      timings: true,
-      chunks: isVerbose,
-      chunkModules: isVerbose,
-      cached: isVerbose,
-      cachedAssets: isVerbose,
+    reasons: isDebug,
+    hash: isVerbose,
+    version: isVerbose,
+    timings: true,
+    chunks: isVerbose,
+    chunkModules: isVerbose,
+    cached: isVerbose,
+    cachedAssets: isVerbose,
   }
 }
 
@@ -69,28 +69,9 @@ function getBaseConfig(prod) {
 
     plugins: [
       new webpack.NoErrorsPlugin(),
-      new webpack.DllReferencePlugin({
-        context: ROOT_DIR,
-        manifest: require('../dist/vendor.json')
-      }),
-      new AddAssetHtmlPlugin({
-        filepath: 'dist/vendor.js',
-        includeSourcemap: false,
-        hash: true
-      }),
-      new ExtractTextPlugin('[name].css')
-    ],
 
-    devServer: {
-      proxy: {
-        '/api_proxy': {
-          target: 'http://tjz.frezc.com',
-          secure: false,
-          changeOrigin: true,
-          pathRewrite: {'^/api_proxy' : ''}
-        }
-      }
-    }
+      new ExtractTextPlugin('[name].css')
+    ]
   }
 }
 
@@ -103,12 +84,14 @@ const prodPlugins = [
       warnings: false,
       drop_console: true
     },
-    comments: false
+    comments: false,
+    mangle: true,
+    minimize: true
   }),
   new webpack.optimize.DedupePlugin(),
   new webpack.DefinePlugin({
-    "process.env": {
-      NODE_ENV: JSON.stringify("production")
+    'process.env': {
+      'NODE_ENV': JSON.stringify('production')
     }
   })
 ]
@@ -131,9 +114,8 @@ function getDllConfig(libs, prod) {
     prodPlugins.map(plugin => plugins.push(plugin))
   }
   return {
-    entry: {
-      vendor: libs
-    },
+    devtool: false,
+    entry: libs,
     output: {
       path: BUILD_DIR,
       filename: '[name].js',
@@ -144,23 +126,33 @@ function getDllConfig(libs, prod) {
   }
 }
 
-function getMainConfig(pages, prod) {
-  if (pages && pages.length > 0) {
+function getMainConfig(entry, prod) {
+  if (entry) {
     const baseConfig = getBaseConfig(prod)
     var c = Object.assign({}, baseConfig, {
-      entry: pages.reduce(function (pre, cur) {
-        pre[cur] = APP_DIR + `/${cur}.js`
-        return pre
-      }, {}),
-      plugins: baseConfig.plugins.concat(pages.map(page =>
+      entry: { [entry.name]: [APP_DIR + `/${entry.name}/index.js`] },
+      output: {
+        path: BUILD_DIR + `/${entry.name}`,
+        filename: 'index.js'
+      },
+      plugins: baseConfig.plugins.concat(
         new HtmlWebpackPlugin({
-          filename: `${page}.html`,
-          template: APP_DIR + `/templates/${page}.html`,
+          filename: `index.html`,
+          template: APP_DIR + `/${entry.name}/index.html`,
           hash: true,
-          chunks: [page],
+          chunks: [entry.name],
           cache: true
+        }),
+        new webpack.DllReferencePlugin({
+          context: ROOT_DIR,
+          manifest: require(`../dist/${entry.vendor}.json`)
+        }),
+        new AddAssetHtmlPlugin({
+          filepath: `dist/${entry.vendor}.js`,
+          includeSourcemap: false,
+          hash: true
         })
-      )),
+      ),
       stats: getStats(!prod)
     })
     if (prod) {
@@ -169,9 +161,11 @@ function getMainConfig(pages, prod) {
           ...c.plugins,
           ...prodPlugins
         ]
-      })
+      });
     } else {
-      c['devtool'] = 'eval'
+      c['devtool'] = 'eval';
+      c.entry[entry.name].unshift("webpack-dev-server/client?http://localhost:7991/", "webpack/hot/dev-server");
+      c.plugins.push(new webpack.HotModuleReplacementPlugin())
     }
     return c
   } else {
