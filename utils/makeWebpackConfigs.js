@@ -1,16 +1,17 @@
 /**
  * Created by ypc on 2016/9/18.
  */
-const path = require('path')
-const webpack = require('webpack')
-const autoprefixer = require('autoprefixer')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
-var ExtractTextPlugin = require("extract-text-webpack-plugin")
+const path = require('path');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v')
+const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v');
 
 const BUILD_DIR = path.resolve(__dirname, '../dist')
+const DEV_DIR = path.resolve(__dirname, '../dev')
 const APP_DIR = path.resolve(__dirname, '../src')
 const ROOT_DIR = path.resolve(__dirname, '..')
 
@@ -43,11 +44,6 @@ function getStats(isDebug) {
 
 function getBaseConfig(prod) {
   return {
-    output: {
-      path: BUILD_DIR,
-      filename: '[name].js'
-    },
-
     module: {
       loaders: [{
         test: /\.js?/,
@@ -100,9 +96,10 @@ const prodPlugins = [
  * 生成dll的配置
  */
 function getDllConfig(libs, prod) {
+  const targetPath = prod ? BUILD_DIR : DEV_DIR
   const plugins = [
     new webpack.DllPlugin({
-      path: path.join(BUILD_DIR, '[name].json'),
+      path: path.join(targetPath, '[name].json'),
       name: '[name]_[chunkhash]',
       context: ROOT_DIR
     })
@@ -117,7 +114,7 @@ function getDllConfig(libs, prod) {
     devtool: false,
     entry: libs,
     output: {
-      path: BUILD_DIR,
+      path: targetPath,
       filename: '[name].js',
       library: '[name]_[chunkhash]'
     },
@@ -129,10 +126,11 @@ function getDllConfig(libs, prod) {
 function getMainConfig(entry, prod) {
   if (entry) {
     const baseConfig = getBaseConfig(prod)
+    const targetPath = prod ? BUILD_DIR : DEV_DIR
     var c = Object.assign({}, baseConfig, {
       entry: { [entry.name]: [APP_DIR + `/${entry.name}/index.js`] },
       output: {
-        path: BUILD_DIR + `/${entry.name}`,
+        path: targetPath + `/${entry.name}`,
         filename: 'index.js'
       },
       plugins: baseConfig.plugins.concat(
@@ -145,10 +143,10 @@ function getMainConfig(entry, prod) {
         }),
         new webpack.DllReferencePlugin({
           context: ROOT_DIR,
-          manifest: require(`../dist/${entry.vendor}.json`)
+          manifest: require(`${targetPath}/${entry.vendor}.json`)
         }),
         new AddAssetHtmlPlugin({
-          filepath: `dist/${entry.vendor}.js`,
+          filepath: `${targetPath}/${entry.vendor}.js`,
           includeSourcemap: false,
           hash: true
         })

@@ -1,0 +1,54 @@
+.msg-section {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  height: 3.6rem;
+  background: white;
+
+  img {
+    width: 2.8rem;
+    height: 2.8rem;
+    margin: 0.4rem 0.6rem;
+  }
+
+  .msg-name {
+    position: absolute;
+    top: 0.7rem;
+    left: 4rem;
+    font-size: 0.8rem;
+    max-width: calc(100% - 3.6rem - 3rem);
+  }
+
+  .msg-content {
+    position: absolute;
+    bottom: 0.7rem;
+    left: 4rem;
+    color: rgba(0, 0, 0, 0.42);
+    max-width: calc(100% - 3.6rem - 3rem);
+  }
+
+  .msg-time {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.5rem;
+    color: rgba(0, 0, 0, 0.42);
+  }
+
+  .msg-unread {
+    position: absolute;
+    text-align: center;
+    min-width: 0.6rem;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: red;
+    color: white;
+    padding: 0.2rem 0.3rem;
+    border-radius: 0.8rem;
+  }
+}
+
+.no-break-line {
+  white-space: nowrap;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

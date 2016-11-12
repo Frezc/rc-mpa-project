@@ -1,0 +1,17 @@
+html, body {
+  height: 100%;
+}
+
+html {
+  font-size: 20px;
+}
+
+body {
+  font-size: 0.7rem;
+  font-family: Helvetica, serif;
+  background: #eee;
+}
+
+.fill {
+  height: 100%;
+}

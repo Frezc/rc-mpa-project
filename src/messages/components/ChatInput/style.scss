@@ -1,0 +1,41 @@
+.chat-input {
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid #ddd;
+  background: white;
+  padding: 0.4rem;
+
+  textarea {
+    height: 1.6rem;
+    resize: none;
+    align-self: stretch;
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    padding: 0.3rem;
+    outline: none;
+    line-height: normal;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &:focus {
+      border-bottom-color: #51C332;
+    }
+  }
+
+  button {
+    align-self: flex-end;
+    height: 1.6rem;
+    width: 3.2rem;
+    border: none;
+    margin-left: 0.4rem;
+    outline: none;
+    background: #51C332;
+    color: white;
+    border-radius: .2rem;
+
+    &:disabled {
+      background: lightgreen;
+    }
+  }
+}

@@ -13,7 +13,7 @@ class AppHeader extends PureComponent {
   }
 
   static defaultProps = {
-    avatar: require('../../assets/avatar.jpg')
+    avatar: require('../.././avatar.jpg')
   }
 
   render() {

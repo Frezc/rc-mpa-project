@@ -2,43 +2,14 @@
  * Created by Frezc on 2016/10/17.
  */
 import { message } from 'antd';
-import fetch from 'isomorphic-fetch';
 import { constructQuery, constructFormData } from '../helpers';
 import auth from '../maintain/configs/jwtAuth';
 import api from './api';
+import { fetchR, readData } from "../helpers";
 
 export { api };
 
-/**
- * fetch with auto retry
- * @param url request url
- * @param params fetch params with { retry(int, default 3), deltaTime(int, default 1000(ms)) }
- */
-export function fetchR(url, params) {
-  params = Object.assign({
-    retry: 3,
-    deltaTime: 1000
-  }, params);
 
-  return new Promise((resolve, reject) => {
-    const wrappedFetch = (retry) => {
-      fetch(url, params)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          if (retry > 1) {
-            setTimeout(() => {
-              wrappedFetch(retry - 1);
-            }, params.deltaTime);
-          } else {
-            reject(error);
-          }
-        })
-    };
-    wrappedFetch(params.retry);
-  });
-}
 
 /**
  * @param url
@@ -79,7 +50,7 @@ export async function easyFetch(url, params, needAuth = true) {
               if (errorMsg.status == 401) {
                 if (errorMsg.message == 'token_expired') {
                   auth.needRefresh = true;
-                  return res(easyFetch(url, params, needAuth));
+                  return res(easyFetch(url, params));
                 } else {
                   auth.toLogin();
                 }
@@ -95,19 +66,6 @@ export async function easyFetch(url, params, needAuth = true) {
         rej({ message: 'Unexpected error!' });
       });
   })
-}
-
-/**
- * read response body to json or text
- * @param response
- */
-function readData(response) {
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.indexOf("application/json") !== -1) {
-    return response.json();
-  } else {
-    return response.text();
-  }
 }
 
 /**
@@ -144,6 +102,7 @@ export function easyGet(url, params, needAuth = true) {
  * http post
  * @param url path and query (use constructQuery)
  * @param params body params
+ * @param needAuth
  */
 export function easyPost(url, params, needAuth = true) {
   return easyFetch(url, {

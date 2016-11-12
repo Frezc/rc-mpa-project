@@ -1,0 +1,14 @@
+.conversation-page {
+  display: flex;
+  flex-direction: column;
+
+  .conver-area {
+    height: 100%;
+    overflow-y: auto;
+
+    .conver-container {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

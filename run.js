@@ -9,10 +9,10 @@ const WebpackDevServer = require('webpack-dev-server');
 
 const tasks = new Map()
 
-function run(task, arguments) {
+function run(task, argus) {
   const start = new Date();
   console.log(`Starting '${task}'...`);
-  return Promise.resolve().then(() => tasks.get(task)(arguments)).then(() => {
+  return Promise.resolve().then(() => tasks.get(task)(argus)).then(() => {
     console.log(`Finished '${task}' after ${new Date().getTime() - start.getTime()}ms`);
   }, err => console.error(err.stack));
 }

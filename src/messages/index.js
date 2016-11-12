@@ -4,8 +4,13 @@
 import React from "react";
 import { render } from "react-dom";
 import { Router, hashHistory } from 'react-router';
+import { routes } from './configs/routes';
+import 'normalize.css';
+import './index.css';
 
 render(
-  <span>开发中</span>,
+  <Router history={hashHistory}>
+    {routes}
+  </Router>,
   document.getElementById('main')
 );
