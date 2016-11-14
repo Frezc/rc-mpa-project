@@ -8,17 +8,13 @@ import { api, easyGet } from '../../../network';
 
 class UserProfilePage extends PureComponent {
 
-  static propTypes = {}
-
-  static defaultProps = {}
-
   static pageSize = 20;
 
   state = {
     loading: false,
     total: 0,
     list: []
-  }
+  };
 
   fetchData(page = 0) {
     this.setState({ loading: true });

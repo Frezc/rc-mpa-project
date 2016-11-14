@@ -22,9 +22,29 @@ class ConversationPage extends PureComponent {
     input: ''
   };
 
+  fetchData(refresh = false) {
+    const targetId = this.props.params.id;
+    mobileGet(api.conversations, {
+      target_id: targetId,
+      off: refresh ? 0 : this.state.conversations.length
+    }).then(json => {
+      const { scrollHeight: prevSh } = this.scrollView;
+      this.setState({
+        total: json.total,
+        conversations: this.state.conversations.unshift(...json.list.reverse())
+      }, () => {
+        if (refresh) {
+          this.scrollToBottom();
+        } else {
+          this.scrollView.scrollTop += this.scrollView.scrollHeight - prevSh;
+        }
+      });
+    })
+  }
+
   scrollToBottom = () => {
     this.scrollView.scrollTop = this.scrollView.scrollHeight;
-  }
+  };
 
   sendMessage = () => {
     const targetId = this.props.params.id;
@@ -47,16 +67,15 @@ class ConversationPage extends PureComponent {
     });
   };
 
+  handleScroll = e => {
+    if (e.target.scrollTop <= 0) {
+      this.fetchData();
+    }
+  };
+
   componentDidMount() {
     const targetId = this.props.params.id;
-    mobileGet(api.conversations, {
-      target_id: targetId
-    }).then(json => {
-      this.setState({
-        total: json.total,
-        conversations: new LocalIdArray(json.list.reverse())
-      }, this.scrollToBottom)
-    })
+    this.fetchData(true);
   }
 
   render() {
@@ -66,18 +85,18 @@ class ConversationPage extends PureComponent {
     const selfId = getParams('id');
     return (
       <div className="fill conversation-page">
-        <div className="conver-area" ref={r => this.scrollView = r}>
-          <div className="conver-container">
-            {conversations.map((conv, id) =>
-              <OneSpeakSection
-                key={id}
-                avatar={conv.sender_avatar}
-                attachRight={conv.sender_id == selfId}
-              >
-                {conv.content}
-              </OneSpeakSection>
-            )}
-          </div>
+        <div className="conver-area"
+             ref={r => this.scrollView = r}
+             onScroll={this.handleScroll}>
+          {conversations.map((conv, id) =>
+            <OneSpeakSection
+              key={id}
+              avatar={conv.sender_avatar}
+              attachRight={conv.sender_id == selfId}
+            >
+              {conv.content}
+            </OneSpeakSection>
+          )}
         </div>
         <ChatInput
           value={input}

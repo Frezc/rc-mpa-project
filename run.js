@@ -1,13 +1,14 @@
 /**
  * Created by ypc on 2016/9/18.
  */
-const del = require('del')
-const webpack = require('webpack')
-const configs = require('./utils/configs')
+const del = require('del');
+const webpack = require('webpack');
+const configs = require('./utils/configs');
 const Configs = require('./utils/makeWebpackConfigs');
 const WebpackDevServer = require('webpack-dev-server');
+const copy = require('copy');
 
-const tasks = new Map()
+const tasks = new Map();
 
 function run(task, argus) {
   const start = new Date();
@@ -20,9 +21,9 @@ function run(task, argus) {
 function runWebpack(config) {
   return new Promise((res, rej) => {
     webpack(config).run((err, stats) => {
-      if (err) rej(err)
+      if (err) rej(err);
       else {
-        console.log(stats.toString(config.stats))
+        console.log(stats.toString(config.stats));
         res()
       }
     })
@@ -38,7 +39,7 @@ tasks.set('bundle', () => {
     .then(() => Promise.all(Object.keys(pages).map((key) =>
       runWebpack(Configs.getMainConfig(pages[key], true))
     )))
-    .then(() => del(Object.keys(configs.libs).map(lib => `dist/${lib}.json`)))
+    .then(() => del(Object.keys(configs.libs).map(lib => `dist/${lib}.*`)))
 });
 
 tasks.set('build', () => {
@@ -48,7 +49,8 @@ tasks.set('build', () => {
 });
 
 tasks.set('dev', page => {
-  const config = Configs.getMainConfig(configs.pages[page]);
+  const pageConfig = configs.pages[page] || configs.defaultPage;
+  const config = Configs.getMainConfig(pageConfig);
   const compiler = webpack(config);
   const server = new WebpackDevServer(compiler, {
     hot: true,
@@ -67,7 +69,16 @@ tasks.set('dev', page => {
 
 tasks.set('debug', page => {
   return runWebpack(Configs.getMainConfig(configs.pages[page]));
-})
+});
+
+tasks.set('public', () => {
+  return new Promise((res, rej) =>
+    copy('dist/*', '/home/www/tjz.frezc.com/public/', function (err) {
+      if (err) rej(err);
+      else res();
+    })
+  );
+});
 
 tasks.set('list', () => {
   console.log('Available command list:');
@@ -75,8 +86,9 @@ tasks.set('list', () => {
     'clean: del dist/*',
     'bundle: bundle asset by webpack using production mode',
     'dev {page-name}: run the webpack-dev-server for this page',
-    'debug {page-name}: generate debug file'
+    'debug {page-name}: generate debug file',
+    'public: move dist files to public directory'
   ].map(msg => console.log(msg));
-})
+});
 
 run(/^\w/.test(process.argv[2] || '') ? process.argv[2] : 'list' /* default */, process.argv.slice(3))

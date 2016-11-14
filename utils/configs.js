@@ -2,7 +2,7 @@
  * Created by Frezc on 2016/10/12.
  */
 
-module.exports = {
+var configs = {
   pages: {
     maintain: {
       name: 'maintain',
@@ -32,4 +32,8 @@ module.exports = {
       'react-router'
     ]
   }
-}
+};
+
+configs.defaultPage = configs.pages.maintain;
+
+module.exports = configs;

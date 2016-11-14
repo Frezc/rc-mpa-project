@@ -5,10 +5,7 @@
   .conver-area {
     height: 100%;
     overflow-y: auto;
-
-    .conver-container {
-      display: flex;
-      flex-direction: column;
-    }
+    display: flex;
+    flex-direction: column;
   }
 }
