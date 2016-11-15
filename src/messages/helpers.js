@@ -95,13 +95,16 @@ export function getToken() {
 }
 
 function tokenInvalid() {
+  if (nativeInterface) nativeInterface.tokenInvalid();
   alert('token invalid');
 }
 
 function tokenExpired() {
+  if (nativeInterface) nativeInterface.tokenExpired();
   alert('token expired');
 }
 
 export function toast(msg) {
+  if (nativeInterface) nativeInterface.showToast(msg);
   alert(msg);
 }
