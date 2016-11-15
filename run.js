@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const configs = require('./utils/configs');
 const Configs = require('./utils/makeWebpackConfigs');
 const WebpackDevServer = require('webpack-dev-server');
-const copy = require('copy');
+const copy = require('copy-dir');
 
 const tasks = new Map();
 
@@ -73,7 +73,7 @@ tasks.set('debug', page => {
 
 tasks.set('public', () => {
   return new Promise((res, rej) =>
-    copy('dist/*', '/home/www/tjz.frezc.com/public/', function (err) {
+    copy.sync('dist', '/home/www/tjz.frezc.com/public', function (err) {
       if (err) rej(err);
       else res();
     })

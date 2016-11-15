@@ -8,7 +8,8 @@
     "dev-dll": "webpack --config=./utils/dll-config.js",
     "debug": "node run debug",
     "build": "node run build",
-    "clean": "node run clean"
+    "clean": "node run clean",
+    "public": "node run public"
   },
   "author": "frezc",
   "license": "MIT",
@@ -39,7 +40,7 @@
     "babel-preset-es2015": "^6.13.1",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
-    "copy": "^0.3.0",
+    "copy-dir": "^0.3.0",
     "css-loader": "^0.23.1",
     "del": "^2.2.2",
     "extract-text-webpack-plugin": "^1.0.1",
