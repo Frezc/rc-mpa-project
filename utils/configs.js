@@ -8,8 +8,8 @@ var configs = {
       name: 'maintain',
       vendor: 'vendor_web'
     },
-    messages: {
-      name: 'messages',
+    msg_center: {
+      name: 'msg_center',
       vendor: 'vendor_lite'
     }
   },

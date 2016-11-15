@@ -7,13 +7,14 @@ const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const WebpackMd5Hash = require('webpack-md5-hash');
 
 const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v');
 
-const BUILD_DIR = path.resolve(__dirname, '../dist')
-const DEV_DIR = path.resolve(__dirname, '../dev')
-const APP_DIR = path.resolve(__dirname, '../src')
-const ROOT_DIR = path.resolve(__dirname, '..')
+const BUILD_DIR = path.resolve(__dirname, '../dist');
+const DEV_DIR = path.resolve(__dirname, '../dev');
+const APP_DIR = path.resolve(__dirname, '../src');
+const ROOT_DIR = path.resolve(__dirname, '..');
 
 const AUTOPREFIXER_BROWSERS = [
   'Android >= 4',
@@ -65,8 +66,7 @@ function getBaseConfig(prod) {
 
     plugins: [
       new webpack.NoErrorsPlugin(),
-
-      new ExtractTextPlugin('[name].css')
+      new WebpackMd5Hash()
     ]
   }
 }
@@ -89,7 +89,8 @@ const prodPlugins = [
     'process.env': {
       'NODE_ENV': JSON.stringify('production')
     }
-  })
+  }),
+  new ExtractTextPlugin('[contenthash].css')
 ]
 
 /**
@@ -131,13 +132,13 @@ function getMainConfig(entry, prod) {
       entry: { [entry.name]: [APP_DIR + `/${entry.name}/index.js`] },
       output: {
         path: targetPath + `/${entry.name}`,
-        filename: 'index.js'
+        filename: prod ? '[chunkhash].js' : 'index.js'
       },
       plugins: baseConfig.plugins.concat(
         new HtmlWebpackPlugin({
           filename: `index.html`,
           template: APP_DIR + `/${entry.name}/index.html`,
-          hash: true,
+          // hash: true,
           chunks: [entry.name],
           cache: true
         }),
