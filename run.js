@@ -73,7 +73,7 @@ tasks.set('debug', page => {
 
 tasks.set('public', () => {
   return new Promise((res, rej) =>
-    copy.sync('dist', '/home/www/tjz.frezc.com/public', function (err) {
+    copy('dist', '/home/www/tjz.frezc.com/public', function (err) {
       if (err) rej(err);
       else res();
     })
