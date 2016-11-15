@@ -2,7 +2,7 @@
  * Created by Frezc on 2016/10/12.
  */
 
-const host = process.env.NODE_ENV == 'production' ? '/' : '/api_proxy/';
+const host = process.env.NODE_ENV == 'production' ? 'http://tjz.frezc.com/' : '/api_proxy/';
 
 const api = {
   auth: host + 'auth',
