@@ -1,0 +1,12 @@
+.easy-img-upload {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    margin-right: 16px;
+  }
+}

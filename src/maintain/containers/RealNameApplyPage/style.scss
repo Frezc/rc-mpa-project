@@ -1,0 +1,19 @@
+.real-name-applies {
+  margin: 16px;
+
+  .expanded-row {
+    display: flex;
+    flex-direction: row;
+
+    .picture {
+      max-height: 400px;
+      max-width: 300px;
+    }
+
+    .detail-form {
+      width: 400px;
+      display: inline-block;
+      margin-left: 8px;
+    }
+  }
+}

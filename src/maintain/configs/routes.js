@@ -7,6 +7,7 @@ import NavContainer from '../containers/NavContainer';
 import LoginPage from '../containers/LoginPage';
 import IndexPage from '../containers/IndexPage';
 import UserProfilePage from '../containers/UserProfilePage';
+import RealNameApplyPage from '../containers/RealNameApplyPage';
 
 export const routes = (
   <Route
@@ -29,6 +30,10 @@ export const routes = (
       <Route
         path="um/user_profiles"
         component={UserProfilePage}
+      />
+      <Route
+        path="am/real_name"
+        component={RealNameApplyPage}
       />
     </Route>
   </Route>

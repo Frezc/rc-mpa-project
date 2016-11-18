@@ -5,9 +5,12 @@ import Auth from '../../network/Auth';
 import api from '../../network/api';
 import store from './store';
 import { push } from 'react-router-redux';
-import { setLogonUser } from '../actions/user';
+import { setLogonUser, logout } from '../actions/common';
 
 const jwtAuth = new Auth({ auth: api.auth, refresh: api.refresh });
 jwtAuth.on('fetched', json => store.dispatch(setLogonUser(json.user)));
-jwtAuth.on('needAuth', () => store.dispatch(push('/login')));
+jwtAuth.on('needAuth', () => {
+  store.dispatch(push('/login'));
+  store.dispatch(logout());
+});
 export default jwtAuth;

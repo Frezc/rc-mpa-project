@@ -9,6 +9,8 @@ const MenuItemGroup = Menu.ItemGroup;
 import auth from '../../configs/jwtAuth';
 import { connect } from 'react-redux';
 import { replace, push } from 'react-router-redux';
+import UserDetailModal from '../UserDetailModal';
+import api from '../../../network/api';
 
 import './style.scss';
 
@@ -54,6 +56,7 @@ class NavContainer extends React.Component {
       <div className="main-page">
         <AppHeader
           nickname={user.nickname}
+          avatar={user.avatar}
         />
         <div className="content-with-menu">
           <Menu
@@ -68,11 +71,15 @@ class NavContainer extends React.Component {
             <SubMenu key="um" title="用户管理">
               <Menu.Item key="user_profiles">用户信息</Menu.Item>
             </SubMenu>
+            <SubMenu key="am" title="申请 & 消息">
+              <Menu.Item key="real_name">实名认证</Menu.Item>
+            </SubMenu>
           </Menu>
           <div className="main-content">
             {children}
           </div>
         </div>
+        <UserDetailModal />
       </div>
     )
   }

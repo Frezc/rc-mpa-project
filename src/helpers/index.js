@@ -86,3 +86,16 @@ export function formatTime(date) {
   }
   return `${date.getHours()}:${date.getMinutes()}`
 }
+
+/**
+ * filter object
+ * @param obj
+ * @param cb function (key, value) => bool
+ * @returns {*}
+ */
+export function objectFilter(obj, cb) {
+  return Object.keys(obj).reduce((newObj, key) => {
+    if (cb(key, obj[key])) newObj[key] = obj[key];
+    return newObj;
+  }, {});
+}

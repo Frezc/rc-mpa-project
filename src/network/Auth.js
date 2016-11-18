@@ -10,7 +10,6 @@ import EventEmitter from 'events';
  */
 class Auth extends EventEmitter {
 
-  token = null;
   user = {};
 
   urls = {};
@@ -35,36 +34,39 @@ class Auth extends EventEmitter {
   }
 
   getAuthSync() {
-    const { token, user } = this;
-    return { token, user };
+    const { user } = this;
+    return { token: this.getToken(), user };
   }
 
-  saveAuth({ token = this.token, user = this.user }) {
+  saveAuth({ token, user = this.user }) {
     this.user = user;
-    this.token = token;
     localStorage.setItem(this.__uk__, btoa(encodeURIComponent(JSON.stringify(this.user))));
-    return localStorage.setItem(this.__tk__, btoa(this.token));
+    return localStorage.setItem(this.__tk__, btoa(token));
   }
 
   loadAuthFromLocal() {
-    const token = localStorage.getItem(this.__tk__);
+    const token = this.getToken();
     const user = localStorage.getItem(this.__uk__);
     if (token && user) {
-      this.token = atob(token);
       this.user = JSON.parse(decodeURIComponent(atob(user)));
     } else {
       this.toLogin();
     }
   }
 
+  // get token from localStorage
+  getToken() {
+    const token = localStorage.getItem(this.__tk__);
+    return token && atob(token);
+  }
+
   check() {
-    return !!this.token;
+    return !!this.getToken();
   }
 
   toLogin() {
     localStorage.removeItem(this.__tk__);
     localStorage.removeItem(this.__uk__);
-    this.token = null;
     this.emit('needAuth');
   }
 
@@ -87,9 +89,10 @@ class Auth extends EventEmitter {
 
   refreshAuth() {
     const refreshUrl = this.urls.refresh;
-    if (!this.token) return Promise.reject({ message: '请先登录!' });
+    const token = this.getToken();
+    if (!token) return Promise.reject({ message: '请先登录!' });
     if (!refreshUrl) return Promise.reject({ message: 'Unset refresh url!' });
-    return Promise.resolve(easyGet(refreshUrl, { token: this.token }, false))
+    return Promise.resolve(easyGet(refreshUrl, { token }, false))
       .then(json => this.authSuccess(json))
       .catch(errorMsg => {
         if (errorMsg.status == 400) {

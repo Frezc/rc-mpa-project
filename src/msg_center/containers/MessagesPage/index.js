@@ -7,6 +7,7 @@ import MsgSection from '../../../components/MsgSection';
 import { hashHistory } from 'react-router';
 import { mobileGet, getSelf } from '../../helpers';
 import api from '../../../network/api';
+import LocalIdArray from 'local-id-array';
 
 import './style.scss';
 
@@ -19,7 +20,7 @@ class MsgListPage extends PureComponent {
   state = {
     loading: false,
     total: -1,
-    list: []
+    list: new LocalIdArray()
   };
 
   fetchData(refresh = false) {
@@ -32,7 +33,7 @@ class MsgListPage extends PureComponent {
     mobileGet(api.messages, { off })
       .then(({ total, list }) => this.setState((prevState) => ({
         total,
-        list: refresh ? list : prevState.list.concat(list),
+        list: refresh ? new LocalIdArray(list) : prevState.list.concat(list),
         loading: false
       })));
   }
@@ -62,7 +63,7 @@ class MsgListPage extends PureComponent {
             onEndReached={this.loadMore}
           >
             {list.length > 0 ?
-              list.map((data, i) =>
+              list.map((data, i, index) =>
                 <MsgSection
                   key={i}
                   avatar={data.sender_avatar}
@@ -71,6 +72,9 @@ class MsgListPage extends PureComponent {
                   time={data.updated_at}
                   unread={data.unread}
                   onPress={() => {
+                    this.setState({
+                      list: list.set(index, Object.assign({}, data, { unread: 0 }))
+                    });
                     if (data.type == 'conversation') {
                       hashHistory.push(`conversations/${data.sender_id}`)
                     } else {

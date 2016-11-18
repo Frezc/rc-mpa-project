@@ -74,7 +74,6 @@ class ConversationPage extends PureComponent {
   };
 
   componentDidMount() {
-    const targetId = this.props.params.id;
     this.fetchData(true);
   }
 

@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 import auth from '../../configs/jwtAuth';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
-import { setLogonUser } from '../../actions/user';
+import { setLogonUser } from '../../actions/common';
 import { push } from 'react-router-redux';
 
 import './style.scss'

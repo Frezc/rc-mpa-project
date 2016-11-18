@@ -57,7 +57,7 @@ tasks.set('dev', page => {
     stats: config.stats,
     proxy: {
       '/api_proxy': {
-        target: 'http://tjz.frezc.com',
+        target: 'http://tjz.frezc.local',
         secure: false,
         changeOrigin: true,
         pathRewrite: { '^/api_proxy': '' }
