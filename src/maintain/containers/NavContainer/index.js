@@ -24,8 +24,8 @@ class NavContainer extends React.Component {
   setUpMenu({ pathname } = this.props) {
     const arr = pathname.split('/');
     this.setState({
-      openKeys: arr.slice(2, -1),
-      selectedKeys: [arr[arr.length - 1]]
+      openKeys: arr.slice(2, 3),
+      selectedKeys: [arr[3]]
     })
   }
 
@@ -73,6 +73,8 @@ class NavContainer extends React.Component {
             </SubMenu>
             <SubMenu key="am" title="申请 & 消息">
               <Menu.Item key="real_name">实名认证</Menu.Item>
+              <Menu.Item key="company">企业认证</Menu.Item>
+              <Menu.Item key="notifications">发送通知</Menu.Item>
             </SubMenu>
           </Menu>
           <div className="main-content">

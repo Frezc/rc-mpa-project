@@ -12,6 +12,7 @@ import EasyImgUpload from '../../../components/EasyImgUpload';
 import { closeUserDetail } from '../../actions/common';
 import auth from '../../configs/jwtAuth';
 import { Link } from 'react-router';
+import { formItemLayout } from '../../configs/constants';
 
 import './style.scss';
 
@@ -134,7 +135,6 @@ class UserDetailModal extends PureComponent {
             <FormItem
               {...formItemLayout}
               label="头像"
-              hasFeedback
             >
               {getFieldDecorator('avatar', {
                 valuePropName: 'imgUrl',
@@ -149,7 +149,13 @@ class UserDetailModal extends PureComponent {
             </FormItem>
             <Collapse bordered={true}>
               <Panel header="其他" key="1">
-                <Link to={{ pathname: '/m/am/real_name', query: { user_id: userId } }} target="_blank">查看实名认证申请</Link>
+                <Link to={{ pathname: '/m/am/real_name', query: { user_id: userId } }} target="_blank">
+                  查看Ta的实名认证申请
+                </Link>
+                {'，'}
+                <Link to={{ pathname: '/m/am/company', query: { user_id: userId } }} target="_blank">
+                  查看Ta的企业认证申请
+                </Link>
               </Panel>
             </Collapse>
           </Form>
@@ -158,11 +164,6 @@ class UserDetailModal extends PureComponent {
     )
   }
 }
-
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
 
 function select(state, ownProps) {
   return state.userDetailModal;

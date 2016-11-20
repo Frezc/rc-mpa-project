@@ -4,6 +4,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { Table } from 'antd';
 import { easyGet } from '../../../network';
+import { objectFilter } from '../../../helpers';
 
 class WrapTable extends PureComponent {
 
@@ -13,12 +14,14 @@ class WrapTable extends PureComponent {
     onChange: PropTypes.func,
     params: PropTypes.object,
     push: PropTypes.func,
-    pathname: PropTypes.string.isRequired
+    location: PropTypes.object.isRequired,
+    shouldRefresh: PropTypes.func
   };
 
   static defaultProps = {
     pageSize: 20,
-    params: {}
+    params: {},
+    shouldRefresh: shouldRefresh
   };
 
   state = {
@@ -36,8 +39,16 @@ class WrapTable extends PureComponent {
     this.setState({ loading: true });
     easyGet(dataUrl, requestParams)
       .then(json => this.setState(json))
-      .catch(() => {})
+      .catch(() => {
+      })
       .then(() => this.setState({ loading: false }));
+  }
+
+  getTargetQuery(nextQuery) {
+    const { location: { query }, columns } = this.props;
+    return objectFilter(Object.assign({}, query, columns.reduce((obj, cur) =>
+      ('filters' in cur) ? Object.assign(obj, { [cur.dataIndex]: undefined }) : obj
+    , {}), nextQuery), (_, v) => v);
   }
 
   handleChange = (pagination, filters, sorter) => {
@@ -51,10 +62,10 @@ class WrapTable extends PureComponent {
   };
 
   updateRouterCb(pagination, filters, sorter) {
-    return (query) => {
-      const { push, pathname } = this.props;
+    return (distQuery) => {
+      const { push, location: { pathname, query } } = this.props;
       console.log('pagination', pagination);
-      if (!query) {
+      if (!distQuery) {
         const filtersParams = Object.keys(filters).reduce((obj, cur) => {
           filters[cur].length > 0 && (obj[cur] = filters[cur].join(','));
           return obj;
@@ -63,7 +74,7 @@ class WrapTable extends PureComponent {
           orderby: sorter.field,
           dir: sorter.order == 'ascend' ? 'asc' : 'desc'
         } : {};
-        query =  {
+        distQuery = {
           ...filtersParams,
           ...sorterParam
         };
@@ -71,11 +82,8 @@ class WrapTable extends PureComponent {
 
       push && push({
         pathname,
-        query: {
-          page: pagination.current,
-          ...query
-        }
-      })
+        query: this.getTargetQuery(distQuery)
+      });
     }
   }
 
@@ -84,7 +92,7 @@ class WrapTable extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.params != nextProps.params) {
+    if (nextProps.shouldRefresh(this.props, nextProps)) {
       this.fetchData(nextProps);
     }
   }
@@ -110,6 +118,10 @@ class WrapTable extends PureComponent {
       />
     )
   }
+}
+
+function shouldRefresh(currentProps, nextProps) {
+  return currentProps.params != nextProps.params;
 }
 
 export default WrapTable;

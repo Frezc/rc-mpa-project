@@ -8,6 +8,8 @@ import LoginPage from '../containers/LoginPage';
 import IndexPage from '../containers/IndexPage';
 import UserProfilePage from '../containers/UserProfilePage';
 import RealNameApplyPage from '../containers/RealNameApplyPage';
+import NotificationPage from '../containers/NotificationsPage';
+import CompanyAppliesPage from '../containers/CompanyAppliesPage';
 
 export const routes = (
   <Route
@@ -34,6 +36,14 @@ export const routes = (
       <Route
         path="am/real_name"
         component={RealNameApplyPage}
+      />
+      <Route
+        path="am/notifications"
+        component={NotificationPage}
+      />
+      <Route
+        path="am/company"
+        component={CompanyAppliesPage}
       />
     </Route>
   </Route>

@@ -14,7 +14,9 @@ const api = {
   self: host + '/self',
   conversations: host + '/conversations',
   realNameApplies: host + '/real_name_applies',
-  imgUpload: host + '/upload/image'
+  imgUpload: host + '/upload/image',
+  notiHistory: host + '/notifications/history',
+  companyApplies: host + '/company_applies'
 };
 
 export default api;

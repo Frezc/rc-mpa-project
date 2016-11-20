@@ -9,8 +9,6 @@ import { fetchR, readData } from "../helpers";
 
 export { api };
 
-
-
 /**
  * @param url
  * @param params
@@ -29,7 +27,7 @@ export async function easyFetch(url, params, needAuth = true) {
     fetchR(url, params)
       .then(response => {
         if (response.ok) {
-          return response.json().then(json => {
+          return readData(response).then(json => {
             res(json);
           })
         } else {
