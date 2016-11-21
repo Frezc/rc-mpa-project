@@ -80,6 +80,11 @@ class WrapTable extends PureComponent {
         };
       }
 
+      distQuery = {
+        page: pagination.current,
+        ...distQuery
+      };
+
       push && push({
         pathname,
         query: this.getTargetQuery(distQuery)

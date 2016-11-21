@@ -68,7 +68,7 @@ class NavContainer extends React.Component {
             onClick={({ keyPath }) => this.navTo(keyPath)}
           >
             <Menu.Item key="index">主页</Menu.Item>
-            <SubMenu key="um" title="用户管理">
+            <SubMenu key="um" title="数据管理">
               <Menu.Item key="user_profiles">用户信息</Menu.Item>
             </SubMenu>
             <SubMenu key="am" title="申请 & 消息">
