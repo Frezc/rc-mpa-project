@@ -7,6 +7,10 @@ import { syncHistoryWithStore } from 'react-router-redux';
 // import configureStore from "./configs/configureStore";
 import store from './configs/store'
 import { routes } from './configs/routes';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+
+moment.locale('zh-cn');
 
 // const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store, {

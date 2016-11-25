@@ -16,7 +16,11 @@ const api = {
   realNameApplies: host + '/real_name_applies',
   imgUpload: host + '/upload/image',
   notiHistory: host + '/notifications/history',
-  companyApplies: host + '/company_applies'
+  companyApplies: host + '/company_applies',
+  companies: host + '/companies',
+  jobs: host + '/jobs',
+  orders: host + '/orders',
+  expectJobs: host + '/expect_jobs'
 };
 
 export default api;

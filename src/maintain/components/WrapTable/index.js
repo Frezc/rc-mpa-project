@@ -9,6 +9,7 @@ import { objectFilter } from '../../../helpers';
 class WrapTable extends PureComponent {
 
   static propTypes = {
+    ...Table.propTypes,
     pageSize: PropTypes.number,
     dataUrl: PropTypes.string.isRequired,
     onChange: PropTypes.func,
@@ -29,6 +30,12 @@ class WrapTable extends PureComponent {
     total: 0,
     list: []
   };
+
+  setLocalData(i, record) {
+    this.setState((prevState) => ({
+      list: prevState.list.slice(0, i).concat(record).concat(prevState.list.slice(i + 1))
+    }));
+  }
 
   fetchData({ dataUrl, pageSize, params } = this.props) {
     const { page = 1 } = params;
@@ -63,8 +70,7 @@ class WrapTable extends PureComponent {
 
   updateRouterCb(pagination, filters, sorter) {
     return (distQuery) => {
-      const { push, location: { pathname, query } } = this.props;
-      console.log('pagination', pagination);
+      const { push, location: { pathname } } = this.props;
       if (!distQuery) {
         const filtersParams = Object.keys(filters).reduce((obj, cur) => {
           filters[cur].length > 0 && (obj[cur] = filters[cur].join(','));

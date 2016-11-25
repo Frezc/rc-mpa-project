@@ -10,6 +10,10 @@ import UserProfilePage from '../containers/UserProfilePage';
 import RealNameApplyPage from '../containers/RealNameApplyPage';
 import NotificationPage from '../containers/NotificationsPage';
 import CompanyAppliesPage from '../containers/CompanyAppliesPage';
+import CompaniesPage from '../containers/CompaniesPage';
+import JobsPage from '../containers/JobsPage';
+import OrdersPage from '../containers/OrdersPage';
+import ExpectJobsPage from '../containers/ExpectJobsPage';
 
 export const routes = (
   <Route
@@ -30,20 +34,47 @@ export const routes = (
         component={IndexPage}
       />
       <Route
-        path="um/user_profiles"
-        component={UserProfilePage}
-      />
+        path="um"
+      >
+        <Route
+          path="user_profiles"
+          component={UserProfilePage}
+        />
+        <Route
+          path="companies"
+          component={CompaniesPage}
+        />
+        <Route
+          path="jobs"
+          component={JobsPage}
+        />
+        <Route
+          path="orders"
+          component={OrdersPage}
+        />
+        <Route
+          path="expect_jobs"
+          component={ExpectJobsPage}
+        />
+        <IndexRedirect to="user_profiles"/>
+      </Route>
       <Route
-        path="am/real_name"
-        component={RealNameApplyPage}
-      />
+        path="am"
+      >
+        <Route
+          path="real_name"
+          component={RealNameApplyPage}
+        />
+        <Route
+          path="company"
+          component={CompanyAppliesPage}
+        />
+        <IndexRedirect to="real_name"/>
+      </Route>
+
       <Route
-        path="am/notifications"
+        path="ac/notifications"
         component={NotificationPage}
-      />
-      <Route
-        path="am/company"
-        component={CompanyAppliesPage}
       />
     </Route>
   </Route>

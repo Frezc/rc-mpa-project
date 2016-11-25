@@ -10,10 +10,6 @@ import { push } from 'react-router-redux';
 
 class UserProfilePage extends PureComponent {
 
-  componentWillUnmount() {
-    console.log('user unmount', this.props.router);
-  }
-
   handleRowClick = (record, index) => {
     this.props.showUserDetail(record.id);
   };
@@ -27,7 +23,7 @@ class UserProfilePage extends PureComponent {
           columns={columns}
           dataUrl={api.users}
           params={location.query}
-          pathname={location.pathname}
+          location={location}
           onRowClick={this.handleRowClick}
           push={push}
         />
@@ -37,7 +33,7 @@ class UserProfilePage extends PureComponent {
 }
 
 const columns = [{
-  title: 'Id',
+  title: 'id',
   dataIndex: 'id',
   key: 'id',
   width: 64

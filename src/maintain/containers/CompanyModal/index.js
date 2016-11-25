@@ -9,36 +9,37 @@ const FormItem = Form.Item;
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const Panel = Collapse.Panel;
 import EasyImgUpload from '../../../components/EasyImgUpload';
-import { closeUserDetail } from '../../actions/common';
+import { closeCompanyModal } from '../../actions/common';
 import auth from '../../configs/jwtAuth';
 import { Link } from 'react-router';
 import { formItemLayout } from '../../configs/constants';
 
 import './style.scss';
 
-class UserDetailModal extends PureComponent {
+class CompanyModal extends PureComponent {
 
   static propTypes = {
     visible: PropTypes.bool,
-    userId: PropTypes.number
+    id: PropTypes.number
   };
 
   static defaultProps = {
     visible: false,
-    userId: -1
+    id: -1
   };
 
   state = {
     loading: false,
     confirmLoading: false,
-    user: {}
+    data: {}
   };
 
   handleSave = () => {
-    this.props.form.validateFields((err, values) => {
+    const { form, id } = this.props;
+    form.validateFields((err, values) => {
       if (!err) {
         this.setState({ confirmLoading: true });
-        easyPost(`${api.users}/${this.props.userId}`, values)
+        easyPost(`${api.companies}/${id}`, values)
           .then(json => {
             message.success('保存成功');
           })
@@ -50,11 +51,11 @@ class UserDetailModal extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.visible && nextProps.userId > 0 && nextProps.userId != this.props.userId) {
+    if (nextProps.visible && nextProps.id > 0 && nextProps.id != this.props.id) {
       this.setState({ loading: true });
-      easyGet(`${api.users}/${nextProps.userId}`)
+      easyGet(`${api.companies}/${nextProps.id}`)
         .then(json => {
-          this.setState({ user: json });
+          this.setState({ data: json });
           this.props.form.resetFields();
         })
         .catch(() => {
@@ -64,18 +65,18 @@ class UserDetailModal extends PureComponent {
   }
 
   render() {
-    const { visible, closeUserDetail, form, userId } = this.props;
-    const { user, loading, confirmLoading } = this.state;
-    const { email, phone, nickname, sign, sex, avatar } = user;
+    const { visible, closeCompanyModal, form, id } = this.props;
+    const { data, loading, confirmLoading } = this.state;
+    const { name, url, address, logo, description, contact, contact_person } = data;
     const { getFieldDecorator } = form;
 
     const token = auth.getAuthSync().token;
     return (
       <Modal
-        title="用户信息"
+        title="企业信息"
         visible={visible}
-        onCancel={closeUserDetail}
-        wrapClassName="user-detail-modal"
+        onCancel={closeCompanyModal}
+        wrapClassName="company-modal"
         okText="保存"
         onOk={this.handleSave}
         confirmLoading={confirmLoading}
@@ -84,61 +85,76 @@ class UserDetailModal extends PureComponent {
           <Form>
             <FormItem
               {...formItemLayout}
-              label="Email"
-            >
-              <Input value={email} readOnly/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="手机号"
-            >
-              <Input value={phone} readOnly/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="昵称"
+              label="名称"
               hasFeedback
             >
-              {getFieldDecorator('nickname', {
-                rules: [{ required: true, message: '不能为空！' }],
-                initialValue: nickname
+              <Input value={name} readOnly/>
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="主页"
+              hasFeedback
+            >
+              {getFieldDecorator('url', {
+                initialValue: url
               })(
                 <Input />
               )}
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="签名"
+              label="地址"
               hasFeedback
             >
-              {getFieldDecorator('sign', {
+              {getFieldDecorator('address', {
                 rules: [{ required: true, message: '不能为空！' }],
-                initialValue: sign
+                initialValue: address
               })(
                 <Input />
               )}
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="性别"
+              label="联系人"
               hasFeedback
             >
-              {getFieldDecorator('sex', {
-                initialValue: String(sex)
+              {getFieldDecorator('contact_person', {
+                rules: [{ required: true, message: '不能为空！' }],
+                initialValue: contact_person
               })(
-                <RadioGroup>
-                  <RadioButton value="0">男</RadioButton>
-                  <RadioButton value="1">女</RadioButton>
-                </RadioGroup>
+                <Input />
               )}
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="头像"
+              label="联系方式"
+              hasFeedback
             >
-              {getFieldDecorator('avatar', {
+              {getFieldDecorator('contact', {
+                rules: [{ required: true, message: '不能为空！' }],
+                initialValue: contact
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="描述"
+              hasFeedback
+            >
+              {getFieldDecorator('description', {
+                initialValue: description
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="logo"
+            >
+              {getFieldDecorator('logo', {
                 valuePropName: 'imgUrl',
-                initialValue: avatar
+                initialValue: logo
               })(
                 <EasyImgUpload
                   name="file"
@@ -149,28 +165,16 @@ class UserDetailModal extends PureComponent {
             </FormItem>
             <Collapse bordered={true}>
               <Panel header="其他" key="1">
-                <Link to={{ pathname: '/m/am/real_name', query: { user_id: userId } }} target="_blank">
-                  查看Ta的实名认证申请
+                <Link to={{ pathname: '/m/am/company', query: { company_id: id, status: 2 } }} target="_blank">
+                  查看该企业的认证信息
                 </Link>
                 {'，'}
-                <Link to={{ pathname: '/m/am/company', query: { user_id: userId } }} target="_blank">
-                  查看Ta的企业认证申请
+                <Link to={{ pathname: '/m/um/user_profiles', query: { company_id: id } }} target="_blank">
+                  查看该企业下的用户信息
                 </Link>
                 {'，'}
-                <Link to={{ pathname: '/m/um/orders', query: { user_id: userId } }} target="_blank">
-                  查看Ta的订单信息
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/expect_jobs', query: { user_id: userId } }} target="_blank">
-                  查看Ta的公开简历
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/companies', query: { user_id: userId } }} target="_blank">
-                  查看Ta的企业信息
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/jobs', query: { user_id: userId } }} target="_blank">
-                  查看Ta发布的岗位信息
+                <Link to={{ pathname: '/m/um/jobs', query: { company_id: id } }} target="_blank">
+                  查看该企业下的岗位信息
                 </Link>
               </Panel>
             </Collapse>
@@ -182,7 +186,7 @@ class UserDetailModal extends PureComponent {
 }
 
 function select(state, ownProps) {
-  return state.userDetailModal;
+  return state.companyModal;
 }
 
-export default connect(select, { closeUserDetail })(Form.create()(UserDetailModal));
+export default connect(select, { closeCompanyModal })(Form.create()(CompanyModal));

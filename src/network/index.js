@@ -38,20 +38,18 @@ export async function easyFetch(url, params, needAuth = true) {
                 message: typeof data === 'object' ? data.error : data
               };
 
+              if (errorMsg.message == 'token_expired') {
+                auth.needRefresh = true;
+                return res(easyFetch(url, params));
+              } else if (errorMsg.message == 'token_invalid') {
+                auth.toLogin();
+              }
               if (errorMsg.status == 400 && typeof errorMsg.message === 'object') {
                 errorMsg.error = resolveInputError(errorMsg.message);
                 errorMsg.message = '参数错误！';
               }
               if (errorMsg.status == 429) {
                 errorMsg.message = '请求过于频繁，喝杯咖啡休息一分钟吧。';
-              }
-              if (errorMsg.status == 401) {
-                if (errorMsg.message == 'token_expired') {
-                  auth.needRefresh = true;
-                  return res(easyFetch(url, params));
-                } else {
-                  auth.toLogin();
-                }
               }
               message.error(`Error[${errorMsg.status}]: ${errorMsg.message}`);
               rej(errorMsg);
@@ -107,5 +105,18 @@ export function easyPost(url, params, needAuth = true) {
     method: 'POST',
     mode: 'cors',
     body: constructFormData(params)
+  }, needAuth);
+}
+
+/**
+ * http delete
+ * @param url
+ * @param params
+ * @param needAuth
+ */
+export function easyDelete(url, params, needAuth = true) {
+  return easyFetch(`${url}?${constructQuery(params)}`, {
+    method: 'DELETE',
+    mode: 'cors'
   }, needAuth);
 }

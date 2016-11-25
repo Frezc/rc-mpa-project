@@ -3,14 +3,15 @@
  */
 import React from 'react';
 import AppHeader from '../../../components/AppHeader';
-import { Menu, Icon } from 'antd';
+import { Menu, Badge } from 'antd';
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 import auth from '../../configs/jwtAuth';
 import { connect } from 'react-redux';
 import { replace, push } from 'react-router-redux';
 import UserDetailModal from '../UserDetailModal';
-import api from '../../../network/api';
+import CompanyModal from '../CompanyModal';
+import JobModal from '../JobModal';
+import ExpectJobModal from '../ExpectJobModal';
 
 import './style.scss';
 
@@ -70,11 +71,19 @@ class NavContainer extends React.Component {
             <Menu.Item key="index">主页</Menu.Item>
             <SubMenu key="um" title="数据管理">
               <Menu.Item key="user_profiles">用户信息</Menu.Item>
+              <Menu.Item key="companies">企业信息</Menu.Item>
+              <Menu.Item key="jobs">岗位信息</Menu.Item>
+              <Menu.Item key="orders">订单信息</Menu.Item>
+              <Menu.Item key="expect_jobs">公开简历信息</Menu.Item>
             </SubMenu>
-            <SubMenu key="am" title="申请 & 消息">
+            <SubMenu key="am" title="申请处理">
               <Menu.Item key="real_name">实名认证</Menu.Item>
               <Menu.Item key="company">企业认证</Menu.Item>
+              <Menu.Item key="feedback">用户反馈</Menu.Item>
+            </SubMenu>
+            <SubMenu key="ac" title="功能中心">
               <Menu.Item key="notifications">发送通知</Menu.Item>
+              <Menu.Item key="banner">首页BANNER</Menu.Item>
             </SubMenu>
           </Menu>
           <div className="main-content">
@@ -82,6 +91,9 @@ class NavContainer extends React.Component {
           </div>
         </div>
         <UserDetailModal />
+        <CompanyModal />
+        <JobModal />
+        <ExpectJobModal />
       </div>
     )
   }

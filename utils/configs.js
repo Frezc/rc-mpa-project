@@ -24,7 +24,8 @@ var configs = {
       'redux',
       'redux-logger',
       'redux-thunk',
-      'validator'
+      'validator',
+      'moment'
     ],
     vendor_lite: [
       'react',

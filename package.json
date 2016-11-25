@@ -29,7 +29,8 @@
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
-    "validator": "^6.0.0"
+    "validator": "^6.0.0",
+    "moment": "~2.15.1"
   },
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^1.0.2",
