@@ -99,3 +99,11 @@ export function objectFilter(obj, cb) {
     return newObj;
   }, {});
 }
+
+/**
+ * { 'key' => v1, 'key2' => v2 } => [{ text: v1, value: 'key' }, { text: v2, value: 'key2' }]
+ * @param obj
+ */
+export function mapToFilters(obj) {
+  return Object.keys(obj).map(key => ({ text: obj[key], value: key }));
+}

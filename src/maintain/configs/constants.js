@@ -1,3 +1,5 @@
+import { mapToFilters } from '../../helpers';
+
 export const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
@@ -44,3 +46,23 @@ export const closeType = {
     3: '管理员'
   }
 };
+
+export const feedbackType = {
+  text: {
+    1: '无分类',
+    2: '应用相关',
+    3: '功能相关'
+  }
+};
+
+feedbackType.filters = mapToFilters(feedbackType.text);
+
+export const feedbackStatus = {
+  text: {
+    1: '未处理',
+    2: '已处理',
+    3: '搁置'
+  }
+};
+
+feedbackStatus.filters = mapToFilters(feedbackStatus.text);

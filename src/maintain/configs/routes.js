@@ -14,6 +14,8 @@ import CompaniesPage from '../containers/CompaniesPage';
 import JobsPage from '../containers/JobsPage';
 import OrdersPage from '../containers/OrdersPage';
 import ExpectJobsPage from '../containers/ExpectJobsPage';
+import BannersPage from '../containers/BannersPage';
+import FeedbacksPage from '../containers/FeedbacksPage';
 
 export const routes = (
   <Route
@@ -69,13 +71,26 @@ export const routes = (
           path="company"
           component={CompanyAppliesPage}
         />
+        <Route
+          path="feedbacks"
+          component={FeedbacksPage}
+        />
         <IndexRedirect to="real_name"/>
       </Route>
 
       <Route
-        path="ac/notifications"
-        component={NotificationPage}
-      />
+        path="ac"
+      >
+        <Route
+          path="notifications"
+          component={NotificationPage}
+        />
+        <Route
+          path="banners"
+          component={BannersPage}
+        />
+      </Route>
+
     </Route>
   </Route>
 )

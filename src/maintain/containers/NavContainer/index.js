@@ -79,11 +79,11 @@ class NavContainer extends React.Component {
             <SubMenu key="am" title="申请处理">
               <Menu.Item key="real_name">实名认证</Menu.Item>
               <Menu.Item key="company">企业认证</Menu.Item>
-              <Menu.Item key="feedback">用户反馈</Menu.Item>
+              <Menu.Item key="feedbacks">用户反馈</Menu.Item>
             </SubMenu>
             <SubMenu key="ac" title="功能中心">
               <Menu.Item key="notifications">发送通知</Menu.Item>
-              <Menu.Item key="banner">首页BANNER</Menu.Item>
+              <Menu.Item key="banners">首页BANNER</Menu.Item>
             </SubMenu>
           </Menu>
           <div className="main-content">

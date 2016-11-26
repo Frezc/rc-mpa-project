@@ -95,11 +95,11 @@ class NotificationsPage extends PureComponent {
 
   renderSendHistory() {
     const { location, push } = this.props;
-    const { pathname, query } = location;
+    const { query } = location;
     return (
       <WrapTable
         dataUrl={api.notiHistory}
-        pathname={pathname}
+        location={location}
         params={query}
         push={push}
         columns={columns}

@@ -10,6 +10,8 @@ import { routes } from './configs/routes';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
+import './style.scss';
+
 moment.locale('zh-cn');
 
 // const store = configureStore();

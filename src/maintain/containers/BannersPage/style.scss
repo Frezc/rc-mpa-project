@@ -1,0 +1,18 @@
+.banners-page {
+  display: flex;
+  flex-direction: row;
+
+  .banners-edit {
+    flex: 1;
+    margin-right: 16px;
+  }
+
+  .banners-preview {
+    width: 432px;
+
+    .preview-pic {
+      height: 300px;
+      width: 400px;
+    }
+  }
+}
