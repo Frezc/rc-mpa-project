@@ -26,7 +26,7 @@ class NavContainer extends React.Component {
     const arr = pathname.split('/');
     this.setState({
       openKeys: arr.slice(2, 3),
-      selectedKeys: [arr[3]]
+      selectedKeys: [arr[arr.length - 1]]
     })
   }
 

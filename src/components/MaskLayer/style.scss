@@ -1,0 +1,24 @@
+.mask-layer {
+  position: relative;
+  color: white;
+
+  .mask-container {
+    width: 100%;
+    height: 100%;
+
+    &.masked {
+      filter: blur(2px);
+    }
+  }
+
+  .dark-layer {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 
 /**
  * fetch with auto retry
+ * 自动重试的ajax
  * @param url request url
  * @param params fetch params with { retry(int, default 3), deltaTime(int, default 1000(ms)) }
  */
@@ -47,6 +48,9 @@ export function readData(response) {
   }
 }
 
+/**
+ * 将多个action creator绑定到某个action creator后dispatch的方法
+ */
 export function bindAfter (actionCreator, afterAction) {
   return (...params) => dispatch => {
     dispatch(actionCreator(...params))
@@ -57,6 +61,7 @@ export function bindAfter (actionCreator, afterAction) {
 }
 
 /**
+ * 将对象转换为query字符串
  * @param params obj { param1: value, param2: value }
  */
 export function constructQuery(params = {}) {
@@ -64,6 +69,7 @@ export function constructQuery(params = {}) {
 }
 
 /**
+ * 将对象转换为FormData对象
  * @param params obj
  */
 export function constructFormData(params = {}) {
@@ -88,10 +94,10 @@ export function formatTime(date) {
 }
 
 /**
- * filter object
+ * 对象的filter方法
  * @param obj
  * @param cb function (key, value) => bool
- * @returns {*}
+ * @return obj
  */
 export function objectFilter(obj, cb) {
   return Object.keys(obj).reduce((newObj, key) => {

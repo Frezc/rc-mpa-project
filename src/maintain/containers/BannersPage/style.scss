@@ -1,10 +1,18 @@
 .banners-page {
   display: flex;
   flex-direction: row;
+  min-width: 1060px;
+  margin: 16px;
 
   .banners-edit {
     flex: 1;
     margin-right: 16px;
+
+    .ant-tabs-tabpane {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   .banners-preview {
@@ -13,6 +21,10 @@
     .preview-pic {
       height: 300px;
       width: 400px;
+    }
+    
+    .preview-empty {
+      text-align: center;
     }
   }
 }

@@ -21,7 +21,9 @@ const api = {
   jobs: host + '/jobs',
   orders: host + '/orders',
   expectJobs: host + '/expect_jobs',
-  feedbacks: host + '/feedbacks'
+  feedbacks: host + '/feedbacks',
+  banners: host + '/banners',
+  data: host + '/data'
 };
 
 export default api;
