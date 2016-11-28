@@ -106,6 +106,6 @@ function tokenExpired() {
 }
 
 export function toast(msg) {
-  if (nativeInterface) nativeInterface.showToast(msg);
+  if (nativeInterface) nativeInterface.toast(msg);
   alert(msg);
 }

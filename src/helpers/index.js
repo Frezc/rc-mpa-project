@@ -10,10 +10,11 @@ import fetch from 'isomorphic-fetch';
  * @param params fetch params with { retry(int, default 3), deltaTime(int, default 1000(ms)) }
  */
 export function fetchR(url, params) {
-  params = Object.assign({
+  params = {
     retry: 3,
-    deltaTime: 1000
-  }, params);
+    deltaTime: 1000,
+    ...params
+  };
 
   return new Promise((resolve, reject) => {
     const wrappedFetch = (retry) => {
