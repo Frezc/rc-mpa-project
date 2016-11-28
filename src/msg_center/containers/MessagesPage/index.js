@@ -73,7 +73,7 @@ class MsgListPage extends PureComponent {
                   unread={data.unread}
                   onPress={() => {
                     this.setState({
-                      list: list.set(index, Object.assign({}, data, { unread: 0 }))
+                      list: list.set(index, { ...data, unread: 0 })
                     });
                     if (data.type == 'conversation') {
                       hashHistory.push(`conversations/${data.sender_id}`)

@@ -96,16 +96,16 @@ export function getToken() {
 }
 
 function tokenInvalid() {
-  if (nativeInterface) nativeInterface.tokenInvalid();
+  if (window.nativeInterface) nativeInterface.tokenInvalid();
   alert('token invalid');
 }
 
 function tokenExpired() {
-  if (nativeInterface) nativeInterface.tokenExpired();
+  if (window.nativeInterface) nativeInterface.tokenExpired();
   alert('token expired');
 }
 
 export function toast(msg) {
-  if (nativeInterface) nativeInterface.toast(msg);
+  if (window.nativeInterface) nativeInterface.toast(msg);
   alert(msg);
 }
