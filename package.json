@@ -20,7 +20,7 @@
     "isomorphic-fetch": "^2.2.1",
     "local-id-array": "0.1.6",
     "normalize.css": "^5.0.0",
-    "rc-pull-to-refresh": "^0.1.1",
+    "rc-pull-to-refresh": "0.1.2",
     "react": "^15.3.1",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",

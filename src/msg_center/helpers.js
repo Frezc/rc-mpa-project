@@ -55,9 +55,10 @@ export function mobileFetch(url, params) {
 }
 
 export function mobileGet(url, params) {
-  params = Object.assign({
-    _: Date.now()
-  }, params);
+  params = {
+    _: Date.now(),
+    ...params
+  };
   return mobileFetch(`${url}?${constructQuery(params)}`, {
     method: 'GET',
     mode: 'cors'
