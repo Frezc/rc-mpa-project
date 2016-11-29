@@ -6,7 +6,7 @@
     flex-direction: row;
 
     .picture {
-      max-height: 600px;
+      max-height: 450px;
       max-width: 450px;
     }
 
@@ -14,6 +14,11 @@
       width: 500px;
       display: inline-block;
       margin-left: 8px;
+
+      .company-logo {
+        max-width: 100px;
+        max-height: 100px;
+      }
     }
   }
 }
