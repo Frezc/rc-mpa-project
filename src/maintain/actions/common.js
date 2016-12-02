@@ -12,6 +12,8 @@ export const SHOW_JOB_MODAL = 'SHOW_JOB_MODAL';
 export const CLOSE_JOB_MODAL = 'CLOSE_JOB_MODAL';
 export const SHOW_EXPECT_JOB_MODAL = 'SHOW_EXPECT_JOB_MODAL';
 export const CLOSE_EXPECT_JOB_MODAL = 'CLOSE_EXPECT_JOB_MODAL';
+export const SHOW_ORDER_MODAL = 'SHOW_ORDER_MODAL';
+export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
 
 export function setLogonUser(user) {
   return {
@@ -75,5 +77,18 @@ export function showExpectJobModal(id) {
 export function closeExpectJobModal() {
   return {
     type: CLOSE_EXPECT_JOB_MODAL
+  }
+}
+
+export function showOrderModal(id) {
+  return {
+    type: SHOW_ORDER_MODAL,
+    payload: id
+  }
+}
+
+export function closeOrderModal() {
+  return {
+    type: CLOSE_ORDER_MODAL
   }
 }

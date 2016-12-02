@@ -7,6 +7,7 @@ import WrapTable from '../../components/WrapTable';
 import { api } from '../../../network';
 import { push } from 'react-router-redux';
 import { showCompanyModal } from '../../actions/common';
+import Filters from '../../components/Filters';
 
 class CompaniesPage extends PureComponent {
 
@@ -19,6 +20,7 @@ class CompaniesPage extends PureComponent {
 
     return (
       <div style={{ margin: 16 }}>
+        <Filters style={{ marginBottom: 8 }} filters={['kw']}/>
         <WrapTable
           columns={columns}
           dataUrl={api.companies}

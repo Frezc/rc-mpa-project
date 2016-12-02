@@ -2,7 +2,7 @@
  * Created by Frezc on 2016/10/12.
  */
 import React from 'react';
-import AppHeader from '../../../components/AppHeader';
+import AppHeader from '../../components/AppHeader';
 import { Menu, Badge } from 'antd';
 const SubMenu = Menu.SubMenu;
 import auth from '../../configs/jwtAuth';
@@ -12,6 +12,7 @@ import UserDetailModal from '../UserDetailModal';
 import CompanyModal from '../CompanyModal';
 import JobModal from '../JobModal';
 import ExpectJobModal from '../ExpectJobModal';
+import OrderModal from '../OrderModal';
 
 import './style.scss';
 
@@ -80,6 +81,7 @@ class NavContainer extends React.Component {
               <Menu.Item key="real_name">实名认证</Menu.Item>
               <Menu.Item key="company">企业认证</Menu.Item>
               <Menu.Item key="feedbacks">用户反馈</Menu.Item>
+              <Menu.Item key="reports">举报和投诉</Menu.Item>
             </SubMenu>
             <SubMenu key="ac" title="功能中心">
               <Menu.Item key="notifications">发送通知</Menu.Item>
@@ -94,6 +96,7 @@ class NavContainer extends React.Component {
         <CompanyModal />
         <JobModal />
         <ExpectJobModal />
+        <OrderModal />
       </div>
     )
   }

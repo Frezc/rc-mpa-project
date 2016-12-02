@@ -23,7 +23,8 @@ const api = {
   expectJobs: host + '/expect_jobs',
   feedbacks: host + '/feedbacks',
   banners: host + '/banners',
-  data: host + '/data'
+  data: host + '/data',
+  reports: host + '/reports'
 };
 
 export default api;

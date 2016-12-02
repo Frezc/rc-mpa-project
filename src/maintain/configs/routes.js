@@ -16,6 +16,7 @@ import OrdersPage from '../containers/OrdersPage';
 import ExpectJobsPage from '../containers/ExpectJobsPage';
 import BannersPage from '../containers/BannersPage';
 import FeedbacksPage from '../containers/FeedbacksPage';
+import ReportsPage from '../containers/ReportsPage';
 
 export const routes = (
   <Route
@@ -74,6 +75,10 @@ export const routes = (
         <Route
           path="feedbacks"
           component={FeedbacksPage}
+        />
+        <Route
+          path="reports"
+          component={ReportsPage}
         />
         <IndexRedirect to="real_name"/>
       </Route>

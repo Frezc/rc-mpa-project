@@ -165,10 +165,6 @@ class UserDetailModal extends PureComponent {
                   查看Ta的公开简历
                 </Link>
                 {'，'}
-                <Link to={{ pathname: '/m/um/companies', query: { user_id: userId } }} target="_blank">
-                  查看Ta的企业信息
-                </Link>
-                {'，'}
                 <Link to={{ pathname: '/m/um/jobs', query: { user_id: userId } }} target="_blank">
                   查看Ta发布的岗位信息
                 </Link>

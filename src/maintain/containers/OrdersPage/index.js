@@ -8,9 +8,10 @@ import { api, easyDelete } from '../../../network';
 import { push } from 'react-router-redux';
 import { showUserDetail, showCompanyModal, showJobModal, showExpectJobModal } from '../../actions/common';
 import Clickable from '../../../components/Clickable';
-import { orderStatus, closeType } from '../../configs/constants';
+import { renderOrderStatusText } from '../../configs/constants';
 import { Modal, message } from 'antd';
 import Filters from '../../components/Filters';
+import EvaluateModal from '../OrderEvaluateModal';
 
 class OrdersPage extends PureComponent {
 
@@ -52,7 +53,7 @@ class OrdersPage extends PureComponent {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: this.renderStatus
+      render: (_, record) => renderOrderStatusText(record)
     }, {
       title: '创建时间',
       dataIndex: 'created_at',
@@ -61,14 +62,7 @@ class OrdersPage extends PureComponent {
       title: '操作',
       dataIndex: 'action',
       key: 'action',
-      render: (_, { id, status }, i) => (status != 2 && status != 3 &&
-        <Clickable
-          style={{ color: 'red' }}
-          onClick={() => this.handleCloseClick(id, i)}
-        >
-          关闭
-        </Clickable>
-      )
+      render: (_, record, i) => this.renderAction(record, i)
     }];
   }
 
@@ -93,17 +87,24 @@ class OrdersPage extends PureComponent {
 
   handleRowClick = record => {
 
-  };
+  }
 
-  renderStatus(status, { applicant_check, recruiter_check, close_type }) {
+  renderAction({ id, status }, i) {
     switch (status) {
+      case 2:
+        return <Clickable onClick={() => this.evaluateModal.show(id)}>评价信息</Clickable>;
       case 0:
-        return `${applicant_check ? '发布方' : '申请者'}未确认`;
-      case 3:
-        return `由${closeType.text[close_type]}关闭`;
-      default:
-        return orderStatus.text[status];
+      case 1:
+        return (
+          <Clickable
+            style={{ color: 'red' }}
+            onClick={() => this.handleCloseClick(id, i)}
+          >
+            关闭
+          </Clickable>
+        )
     }
+    return ''
   }
 
   render() {
@@ -111,7 +112,7 @@ class OrdersPage extends PureComponent {
 
     return (
       <div style={{ margin: 16 }}>
-        <Filters style={{ marginBottom: 8 }}/>
+        <Filters style={{ marginBottom: 8 }} filters={['user_id']}/>
         <WrapTable
           ref={o => this.table = o}
           columns={this.columns}
@@ -121,6 +122,7 @@ class OrdersPage extends PureComponent {
           push={push}
           onRowClick={this.handleRowClick}
         />
+        <EvaluateModal ref={r => this.evaluateModal = r}/>
       </div>
     )
   }

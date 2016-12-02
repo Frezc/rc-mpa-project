@@ -8,6 +8,8 @@ import { api } from '../../../network';
 import { push } from 'react-router-redux';
 import { showUserDetail, showCompanyModal, showJobModal } from '../../actions/common';
 import Clickable from '../../../components/Clickable';
+import { Tooltip } from 'antd';
+import Filters from '../../components/Filters';
 
 class JobsPage extends PureComponent {
 
@@ -32,6 +34,13 @@ class JobsPage extends PureComponent {
     title: '访问次数',
     dataIndex: 'visited',
     key: 'visited'
+  }, {
+    title: '评分',
+    dataIndex: 'average_score',
+    key: 'average_score',
+    render: (v, record) => v ?
+      <Tooltip title={`来自${record.number_evaluate}位用户的评价`}><span>{Number(v).toFixed(2)}</span></Tooltip> :
+      '-'
   }, {
     title: 'Active',
     dataIndex: 'active',
@@ -59,7 +68,7 @@ class JobsPage extends PureComponent {
           {creator_name}
         </Clickable>
         {company_id &&
-          <span>
+        <span>
             （
             <Clickable
               onClick={() => showCompanyModal(company_id)}
@@ -78,6 +87,7 @@ class JobsPage extends PureComponent {
 
     return (
       <div style={{ margin: 16 }}>
+        <Filters style={{ marginBottom: 8 }} filters={['kw']}/>
         <WrapTable
           columns={this.columns}
           dataUrl={api.jobs}

@@ -17,6 +17,10 @@
    expectJobModal: {
      visible: false,
      id: -1
+   },
+   orderModal: {
+     visible: false,
+     id: -1
    }
  }
  **/
@@ -25,7 +29,8 @@ import { combineReducers } from "redux";
 import { routerReducer as router } from 'react-router-redux';
 import {
   SET_LOGON_USER, SHOW_USER_DETAIL, CLOSE_USER_DETAIL, LOGOUT, SHOW_COMPANY_MODAL, CLOSE_COMPANY_MODAL,
-  SHOW_JOB_MODAL, CLOSE_JOB_MODAL, SHOW_EXPECT_JOB_MODAL, CLOSE_EXPECT_JOB_MODAL
+  SHOW_JOB_MODAL, CLOSE_JOB_MODAL, SHOW_EXPECT_JOB_MODAL, CLOSE_EXPECT_JOB_MODAL, SHOW_ORDER_MODAL,
+  CLOSE_ORDER_MODAL
 } from '../actions/common';
 import auth from '../configs/jwtAuth';
 
@@ -113,12 +118,31 @@ function expectJobModal(state = { visible: false, id: -1 }, action) {
   return state;
 }
 
+function orderModal(state = { visible: false, id: -1 }, action) {
+  switch (action.type) {
+    case SHOW_ORDER_MODAL:
+      return {
+        visible: true,
+        id: action.payload
+      };
+    case CLOSE_ORDER_MODAL:
+      return Object.assign({}, state, {
+        visible: false
+      });
+    case LOGOUT:
+      return { visible: false, id: -1 };
+  }
+
+  return state;
+}
+
 const rootRuducer = combineReducers({
   logonUser,
   userDetailModal,
   companyModal,
   jobModal,
   expectJobModal,
+  orderModal,
   router
 });
 

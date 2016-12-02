@@ -97,12 +97,14 @@ export function formatTime(date) {
 /**
  * 对象的filter方法
  * @param obj
- * @param cb function (key, value) => bool
+ * @param cbOrArray function (key, value) => bool or [key, ..]
  * @return obj
  */
-export function objectFilter(obj, cb) {
+export function objectFilter(obj, cbOrArray) {
   return Object.keys(obj).reduce((newObj, key) => {
-    if (cb(key, obj[key])) newObj[key] = obj[key];
+    if (typeof cbOrArray === 'function' && cbOrArray(key, obj[key])
+      || Array.isArray(cbOrArray) && cbOrArray.indexOf(key) != -1)
+      newObj[key] = obj[key];
     return newObj;
   }, {});
 }

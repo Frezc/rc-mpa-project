@@ -1,3 +1,4 @@
+import React from 'react';
 import { mapToFilters } from '../../helpers';
 
 export const formItemLayout = {
@@ -66,4 +67,28 @@ export const feedbackStatus = {
   }
 };
 
+export const reportType = {
+  text: {
+    'user': '用户',
+    'order': '订单',
+    'company': '企业',
+    'job': '岗位',
+    'expect_job': '公开简历'
+  }
+};
+
+reportType.filters = mapToFilters(reportType.text);
+
 feedbackStatus.filters = mapToFilters(feedbackStatus.text);
+
+
+export function renderOrderStatusText({ applicant_check, recruiter_check, close_type, status }) {
+  switch (status) {
+    case 0:
+      return `${applicant_check ? '发布方' : '申请者'}未确认`;
+    case 3:
+      return <span style={{ color: 'gray' }}>{`由${closeType.text[close_type]}关闭`}</span>;
+    default:
+      return orderStatus.text[status];
+  }
+}

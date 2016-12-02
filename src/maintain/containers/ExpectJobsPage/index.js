@@ -8,6 +8,7 @@ import { api } from '../../../network';
 import { push } from 'react-router-redux';
 import { showUserDetail, showExpectJobModal } from '../../actions/common';
 import Clickable from '../../../components/Clickable';
+import Filters from '../../components/Filters';
 
 class ExpectJobsPage extends PureComponent {
 
@@ -17,6 +18,10 @@ class ExpectJobsPage extends PureComponent {
       title: 'id',
       dataIndex: 'id',
       key: 'id'
+    }, {
+      title: '标题',
+      dataIndex: 'title',
+      key: 'title'
     }, {
       title: '发布者',
       dataIndex: 'user_name',
@@ -58,6 +63,7 @@ class ExpectJobsPage extends PureComponent {
 
     return (
       <div style={{ margin: 16 }}>
+        <Filters style={{ marginBottom: 8 }} filters={['kw']}/>
         <WrapTable
           columns={this.columns}
           dataUrl={api.expectJobs}

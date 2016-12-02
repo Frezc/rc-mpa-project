@@ -8,6 +8,7 @@ import WrapTable from '../../components/WrapTable';
 import { showUserDetail, showCompanyModal } from '../../actions/common';
 import { push } from 'react-router-redux';
 import Clickable from '../../../components/Clickable';
+import Filters from '../../components/Filters';
 
 class UserProfilePage extends PureComponent {
 
@@ -64,6 +65,7 @@ class UserProfilePage extends PureComponent {
 
     return (
       <div style={{ margin: 16 }}>
+        <Filters style={{ marginBottom: 8 }} filters={['kw']}/>
         <WrapTable
           columns={this.columns}
           dataUrl={api.users}

@@ -112,7 +112,7 @@ class RealNameApplyPage extends PureComponent {
 
     return (
       <div className="real-name-applies">
-        <Filters style={{ marginBottom: 8 }}/>
+        <Filters style={{ marginBottom: 8 }} filters={['user_id']}/>
         <WrapTable
           ref={r => this.table = r}
           params={location.query}

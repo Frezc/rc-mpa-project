@@ -8,7 +8,6 @@ const FormItem = Form.Item;
 import auth from '../../configs/jwtAuth';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
-import { setLogonUser } from '../../actions/common';
 import { push } from 'react-router-redux';
 
 import './style.scss'
@@ -61,7 +60,7 @@ class LoginPage extends PureComponent {
       auth.fetchAuth(email, password)
         .then(json => {
           // this.props.dispatch(setLogonUser(json.user));
-          this.props.dispatch(push('/m'));
+          this.props.push('/m');
         })
         .catch(errorMsg => {
           const newState = {};
@@ -76,7 +75,7 @@ class LoginPage extends PureComponent {
 
   componentWillMount() {
     if (auth.check()) {
-      this.props.dispatch(push('/m'));
+      this.props.push('/m');
     }
   }
 
@@ -128,4 +127,4 @@ function select(state, ownProps) {
   }
 }
 
-export default connect(select)(LoginPage);
+export default connect(select, { push })(LoginPage);
