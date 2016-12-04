@@ -81,7 +81,6 @@ reportType.filters = mapToFilters(reportType.text);
 
 feedbackStatus.filters = mapToFilters(feedbackStatus.text);
 
-
 export function renderOrderStatusText({ applicant_check, recruiter_check, close_type, status }) {
   switch (status) {
     case 0:
@@ -92,3 +91,22 @@ export function renderOrderStatusText({ applicant_check, recruiter_check, close_
       return orderStatus.text[status];
   }
 }
+
+export const userRole = {
+  text: {
+    'user': '普通用户',
+    'admin': '管理员',
+    'banned': '封禁'
+  }
+};
+
+userRole.filters = mapToFilters(userRole.text);
+
+export const modelExist = {
+  text: {
+    1: '正常',
+    2: '已删除'
+  }
+};
+
+modelExist.filters = mapToFilters(modelExist.text);

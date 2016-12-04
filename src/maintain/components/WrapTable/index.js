@@ -54,7 +54,7 @@ class WrapTable extends PureComponent {
   getTargetQuery(nextQuery) {
     const { location: { query }, columns } = this.props;
     return objectFilter(Object.assign({}, query, columns.reduce((obj, cur) =>
-      ('filters' in cur) ? Object.assign(obj, { [cur.dataIndex]: undefined }) : obj
+      ('filters' in cur) ? Object.assign(obj, { [cur.key]: undefined }) : obj
     , {}), nextQuery), (_, v) => v);
   }
 
