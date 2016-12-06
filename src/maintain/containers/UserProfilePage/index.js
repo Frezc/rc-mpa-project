@@ -10,12 +10,21 @@ import { push } from 'react-router-redux';
 import Clickable from '../../../components/Clickable';
 import Filters from '../../components/Filters';
 import { userRole } from '../../configs/constants';
-import { Modal, message } from 'antd';
+import { Modal, message, Button } from 'antd';
+// import OperationLogs from '../../components/OperationLogs';
 
 class UserProfilePage extends PureComponent {
 
+  state = {
+    showLogs: false,
+    showUserId: -1,
+    selecting: false,
+    selectedRowKeys: []
+  };
+
   get columns() {
     const { showCompanyModal } = this.props;
+    const { role_name } = this.props.location.query;
 
     return [{
       title: 'id',
@@ -59,6 +68,9 @@ class UserProfilePage extends PureComponent {
       title: '权限',
       dataIndex: 'role_name',
       key: 'role_name',
+      filters: userRole.filters,
+      filteredValue: role_name || [],
+      filterMultiple: false,
       render: v => <span style={v == 'banned' ? { color: 'red' } : {}}>{userRole.text[v]}</span>
     }, {
       title: '操作',
@@ -67,9 +79,42 @@ class UserProfilePage extends PureComponent {
     }]
   }
 
+  get rowSelection() {
+    const { selectedRowKeys } = this.state;
+    return {
+      selectedRowKeys,
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({ selectedRowKeys })
+      }
+    }
+  }
+
   handleRowClick = (record, index) => {
     this.props.showUserDetail(record.id);
   };
+
+  handleModalCancel = () => {
+    this.setState({
+      showLogs: false
+    })
+  };
+
+  handleSendNotification = () => {
+    const { push } = this.props;
+    const { selectedRowKeys } = this.state;
+    if (selectedRowKeys.length > 0) {
+      push({ pathname: '/m/ac/notifications', state: { selectedUsers: selectedRowKeys } })
+    } else {
+      message.warn('请至少选择一位用户')
+    }
+  };
+
+  showLogs(user_id) {
+    this.setState({
+      showLogs: true,
+      showUserId: user_id
+    });
+  }
 
   setRole(id, role, i) {
     Modal.confirm({
@@ -79,34 +124,73 @@ class UserProfilePage extends PureComponent {
           this.table.setLocalData(i, json);
           message.success('操作成功');
         })
-        .catch(() => {})
+        .catch(() => {
+        })
     })
   }
 
   renderAction(record, i) {
+    const result = [
+      // <Clickable key="op" onClick={e => {
+      //   e.stopPropagation();
+      //   this.showLogs(record.id)
+      // }}>操作记录</Clickable>
+    ];
     switch (record.role_name) {
       case 'user':
-        return (
-          <Clickable onClick={e => {
-            e.stopPropagation();
-            this.setRole(record.id, 'banned', i)
-          }}>封禁</Clickable>
+        result.push(
+          // <span className="ant-divider" key="di"/>,
+          <Clickable
+            key="action"
+            style={{ color: 'red' }}
+            onClick={e => {
+              e.stopPropagation();
+              this.setRole(record.id, 'banned', i)
+            }}>
+            封禁
+          </Clickable>
         );
+        break;
       case 'banned':
-        return (
-          <Clickable onClick={e => {
-            e.stopPropagation();
-            this.setRole(record.id, 'user', i)
-          }}>恢复</Clickable>
+        result.push(
+          // <span className="ant-divider" key="di"/>,
+          <Clickable
+            key="action"
+            onClick={e => {
+              e.stopPropagation();
+              this.setRole(record.id, 'user', i)
+            }}>
+            恢复
+          </Clickable>
         );
+        break;
     }
+
+    return result;
+  }
+
+  renderOtherAction() {
+    const { selecting, selectedRowKeys } = this.state;
+    return (
+      <div style={{ position: 'absolute', right: 0, top: 0 }}>
+        {selecting ?
+          <div>
+            {`已选择了${selectedRowKeys.length}位用户`}
+            <Button type="primary" style={{ marginLeft: 8, marginRight: 8 }} onClick={this.handleSendNotification}>发送通知</Button>
+            <Button type="ghost" onClick={() => this.setState({ selecting: false, selectedRowKeys: [], selectedRows: [] })}>取消</Button>
+          </div> :
+          <Button type="primary" onClick={() => this.setState({ selecting: true })}>选择用户</Button>
+        }
+      </div>
+    )
   }
 
   render() {
     const { location, push } = this.props;
+    const { showLogs, showUserId, selecting } = this.state;
 
     return (
-      <div style={{ margin: 16 }}>
+      <div style={{ margin: 16, position: 'relative' }}>
         <Filters style={{ marginBottom: 8 }} filters={['kw']}/>
         <WrapTable
           ref={r => this.table = r}
@@ -116,7 +200,17 @@ class UserProfilePage extends PureComponent {
           location={location}
           onRowClick={this.handleRowClick}
           push={push}
+          rowSelection={selecting ? this.rowSelection : null}
         />
+        {/*<Modal*/}
+          {/*title="操作记录"*/}
+          {/*visible={showLogs}*/}
+          {/*onCancel={this.handleModalCancel}*/}
+          {/*footer={<Button size="large" type="primary" onClick={this.handleModalCancel}>OK</Button>}*/}
+        {/*>*/}
+          {/*<OperationLogs userId={showUserId}/>*/}
+        {/*</Modal>*/}
+        {this.renderOtherAction()}
       </div>
     )
   }

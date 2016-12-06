@@ -72,7 +72,7 @@ class UserDetailModal extends PureComponent {
     const token = auth.getAuthSync().token;
     return (
       <Modal
-        title="用户信息"
+        title={`用户信息（id: ${userId}）`}
         visible={visible}
         onCancel={closeUserDetail}
         wrapClassName="user-detail-modal"
@@ -147,31 +147,35 @@ class UserDetailModal extends PureComponent {
                 />
               )}
             </FormItem>
-            <Collapse bordered={true}>
-              <Panel header="其他" key="1">
-                <Link to={{ pathname: '/m/am/real_name', query: { user_id: userId } }} target="_blank">
-                  查看Ta的实名认证申请
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/am/company', query: { user_id: userId } }} target="_blank">
-                  查看Ta的企业认证申请
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/orders', query: { user_id: userId } }} target="_blank">
-                  查看Ta的订单信息
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/expect_jobs', query: { user_id: userId } }} target="_blank">
-                  查看Ta的公开简历
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/jobs', query: { user_id: userId } }} target="_blank">
-                  查看Ta发布的岗位信息
-                </Link>
-              </Panel>
-            </Collapse>
           </Form>
         </Spin>
+        <Collapse bordered={true}>
+          <Panel header="其他" key="1">
+            <Link to={{ pathname: '/m/am/real_name', query: { user_id: userId } }} target="_blank">
+              查看Ta的实名认证申请
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/am/company', query: { user_id: userId } }} target="_blank">
+              查看Ta的企业认证申请
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/orders', query: { user_id: userId } }} target="_blank">
+              查看Ta的订单信息
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/expect_jobs', query: { user_id: userId } }} target="_blank">
+              查看Ta的公开简历
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/jobs', query: { user_id: userId } }} target="_blank">
+              查看Ta发布的岗位信息
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/job_evaluates', query: { user_id: userId } }} target="_blank">
+              查看Ta发布的评价
+            </Link>
+          </Panel>
+        </Collapse>
       </Modal>
     )
   }

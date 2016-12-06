@@ -3,14 +3,16 @@
  */
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Form, Input, Select, Button, message } from 'antd';
+import { Tabs, Form, Input, Select, Button, message, Tooltip, Tag, Popover } from 'antd';
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 import { formItemLayout, tailFormItemLayout } from '../../configs/constants';
-import { easyPost, api } from '../../../network';
+import { easyJsonPost, api } from '../../../network';
 import WrapTable from '../../components/WrapTable';
 import { push } from 'react-router-redux';
+import ReadOnlyTextarea from '../../../components/ReadOnlyTextarea'
+import Clickable from '../../../components/Clickable';
 
 class NotificationsPage extends PureComponent {
 
@@ -19,16 +21,22 @@ class NotificationsPage extends PureComponent {
   };
 
   sendNotification = () => {
+    const { state } = this.props.location;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('validate', values);
+        const params = values;
+        if (state && state.selectedUsers) {
+          Object.assign(params, { target: state.selectedUsers });
+        }
+        console.log('validate', params);
         this.setState({ sending: true });
-        easyPost(api.notifications, values)
+        easyJsonPost(api.notifications, params)
           .then(res => {
             message.success(res);
             this.props.form.resetFields();
           })
-          .catch(() => {})
+          .catch(() => {
+          })
           .then(() => this.setState({ sending: false }));
       }
     })
@@ -36,16 +44,28 @@ class NotificationsPage extends PureComponent {
 
   changeTab = tab => {
     const { push, location } = this.props;
-    const { pathname, query } = location;
-    push({ pathname, query: Object.assign({}, query, { tab }) });
+    const { query } = location;
+    push({ ...location, query: Object.assign({}, query, { tab }) });
   };
 
   shouldRefresh = (currentProps, nextProps) => {
     return nextProps.params.tab == '2' && currentProps.params != nextProps.params;
   };
 
+  componentDidMount() {
+    const content = localStorage.getItem('notification_content');
+    content && this.props.form.setFieldsValue({ content });
+  }
+
+  componentWillUnmount() {
+    this.props.form.validateFields((err, { content }) => {
+      localStorage.setItem('notification_content', content || '');
+    });
+  }
+
   renderSendForm() {
-    const { getFieldDecorator } = this.props.form;
+    const { push, form: { getFieldDecorator }, location } = this.props;
+    const { state } = location;
 
     return (
       <Form style={{ maxWidth: 720 }}>
@@ -76,7 +96,17 @@ class NotificationsPage extends PureComponent {
           {...formItemLayout}
           label="接受者"
         >
-          所有人
+          {state && state.selectedUsers ?
+            <Popover title={'用户ID'} content={<div style={{ maxWidth: 600, wordWrap: 'break-word' }}>{state.selectedUsers.join(',')}</div>}>
+              <Tag closable
+                   onClose={() => push({ ...location, state: {} })}>{`已选择的${state.selectedUsers.length}位用户`}</Tag>
+            </Popover> :
+            <span>
+              <Tooltip title="可以在用户信息界面指定用户"><span>所有人</span></Tooltip>
+              {' '}
+              <Clickable onClick={() => push('/m/um/user_profiles')}>去指定用户</Clickable>
+            </span>
+          }
         </FormItem>
         <FormItem
           {...tailFormItemLayout}
@@ -131,7 +161,8 @@ const columns = [{
   title: '内容',
   dataIndex: 'content',
   key: 'content',
-  width: 450
+  width: 450,
+  render: (v) => <ReadOnlyTextarea value={v}/>
 }, {
   title: '操作者',
   dataIndex: 'user_name',
@@ -142,15 +173,21 @@ const columns = [{
   key: 'from',
   render: value => {
     switch (value) {
-      case '1': return '工作助手';
-      default: return '通知助手';
+      case '1':
+        return '工作助手';
+      default:
+        return '通知助手';
     }
   }
 }, {
   title: '接受者',
-  dataIndex: 'to',
-  key: 'to',
-  render: value => value || '所有人'
+  dataIndex: 'target',
+  key: 'target',
+  render: value => value ?
+    <Popover title={'用户ID'} content={<div style={{ maxWidth: 600, wordWrap: 'break-word' }}>{value.join(',')}</div>}>
+      <span>{value.length}位用户</span>
+    </Popover> :
+    '所有人'
 }, {
   title: '发送时间',
   dataIndex: 'created_at',

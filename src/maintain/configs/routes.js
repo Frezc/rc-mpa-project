@@ -17,6 +17,7 @@ import ExpectJobsPage from '../containers/ExpectJobsPage';
 import BannersPage from '../containers/BannersPage';
 import FeedbacksPage from '../containers/FeedbacksPage';
 import ReportsPage from '../containers/ReportsPage';
+import JobEvaluatesPage from '../containers/JobEvaluatesPage';
 
 export const routes = (
   <Route
@@ -58,6 +59,10 @@ export const routes = (
         <Route
           path="expect_jobs"
           component={ExpectJobsPage}
+        />
+        <Route
+          path="job_evaluates"
+          component={JobEvaluatesPage}
         />
         <IndexRedirect to="user_profiles"/>
       </Route>

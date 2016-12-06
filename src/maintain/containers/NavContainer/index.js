@@ -3,8 +3,7 @@
  */
 import React from 'react';
 import AppHeader from '../../components/AppHeader';
-import { Menu, Badge } from 'antd';
-const SubMenu = Menu.SubMenu;
+import { Menu } from 'antd';
 import auth from '../../configs/jwtAuth';
 import { connect } from 'react-redux';
 import { replace, push } from 'react-router-redux';
@@ -13,6 +12,8 @@ import CompanyModal from '../CompanyModal';
 import JobModal from '../JobModal';
 import ExpectJobModal from '../ExpectJobModal';
 import OrderModal from '../OrderModal';
+
+const SubMenu = Menu.SubMenu;
 
 import './style.scss';
 
@@ -32,13 +33,26 @@ class NavContainer extends React.Component {
   }
 
   navTo(keyPath) {
-    const { dispatch } = this.props;
-    dispatch(push(`/m/${keyPath.reverse().join('/')}`));
+    const { push } = this.props;
+    console.log(keyPath);
+    const path = keyPath.reverse();
+    const state = { pathname: `/m/${path.join('/')}` };
+    if (path[0] == 'um') {
+      switch (path[1]) {
+        case 'jobs':
+          if (Boolean(window.localStorage.getItem('job_exist_show'))) state.query = { exist: 1 };
+          break;
+        case 'expect_jobs':
+          if (Boolean(window.localStorage.getItem('expect_exist_show'))) state.query = { exist: 1 };
+          break;
+      }
+    }
+    push(state);
   }
 
   componentWillMount() {
     if (!auth.check()) {
-      this.props.dispatch(replace('/login'));
+      this.props.replace('/login');
     }
     this.setUpMenu();
   }
@@ -76,6 +90,7 @@ class NavContainer extends React.Component {
               <Menu.Item key="jobs">岗位信息</Menu.Item>
               <Menu.Item key="orders">订单信息</Menu.Item>
               <Menu.Item key="expect_jobs">公开简历信息</Menu.Item>
+              <Menu.Item key="job_evaluates">评价信息</Menu.Item>
             </SubMenu>
             <SubMenu key="am" title="申请处理">
               <Menu.Item key="real_name">实名认证</Menu.Item>
@@ -109,4 +124,4 @@ function select(state) {
   }
 }
 
-export default connect(select)(NavContainer);
+export default connect(select, { push, replace })(NavContainer);

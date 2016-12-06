@@ -54,7 +54,7 @@ class ReportsPage extends PureComponent {
       render: v => <span style={{ color: statusColor[v] }}>{feedbackStatus.text[v]}</span>,
       filters: feedbackStatus.filters,
       filterMultiple: false,
-      filteredValue: query.status ? [query.status] : []
+      filteredValue: query.status ? [query.status] : [feedbackStatus.filters[0].value]
     }, {
       title: '创建时间',
       dataIndex: 'created_at',

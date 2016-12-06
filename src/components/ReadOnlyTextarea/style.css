@@ -1,0 +1,14 @@
+.readonly-textarea {
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  cursor: default;
+  padding: 0;
+}
+
+.readonly-textarea:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}

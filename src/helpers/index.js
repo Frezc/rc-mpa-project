@@ -116,3 +116,17 @@ export function objectFilter(obj, cbOrArray) {
 export function mapToFilters(obj) {
   return Object.keys(obj).map(key => ({ text: obj[key], value: key }));
 }
+
+/**
+ * 在数组每项中间插入一项
+ */
+export function arrayDivider(array, dividerEl) {
+  if (array.length > 1) {
+    const newArr = [array[0]];
+    for (let i = 1; i < array.length; i++) {
+      newArr.push(dividerEl, array[i]);
+    }
+    return newArr;
+  }
+  return array;
+}

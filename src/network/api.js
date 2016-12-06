@@ -24,7 +24,9 @@ const api = {
   feedbacks: host + '/feedbacks',
   banners: host + '/banners',
   data: host + '/data',
-  reports: host + '/reports'
+  reports: host + '/reports',
+  boss_umsg: host + '/boss/umsg',
+  evaluates: host + '/evaluates'
 };
 
 export default api;

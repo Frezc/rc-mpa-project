@@ -68,7 +68,7 @@ class JobModal extends PureComponent {
 
     return (
       <Modal
-        title="岗位信息"
+        title={`岗位信息（id: ${id}）`}
         visible={visible}
         onCancel={closeJobModal}
         wrapClassName="job-modal"
@@ -136,15 +136,19 @@ class JobModal extends PureComponent {
                 <Switch />
               )}
             </FormItem>
-            <Collapse bordered={true}>
-              <Panel header="其他" key="1">
-                <Link to={{ pathname: '/m/um/orders', query: { job_id: id } }} target="_blank">
-                  查看该岗位的订单信息
-                </Link>
-              </Panel>
-            </Collapse>
           </Form>
         </Spin>
+        <Collapse bordered={true}>
+          <Panel header="其他" key="1">
+            <Link to={{ pathname: '/m/um/orders', query: { job_id: id } }} target="_blank">
+              查看该岗位的订单信息
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/job_evaluates', query: { job_id: id } }} target="_blank">
+              查看该岗位的评价
+            </Link>
+          </Panel>
+        </Collapse>
       </Modal>
     )
   }

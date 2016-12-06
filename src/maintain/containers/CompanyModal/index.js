@@ -73,7 +73,7 @@ class CompanyModal extends PureComponent {
     const token = auth.getAuthSync().token;
     return (
       <Modal
-        title="企业信息"
+        title={`企业信息（id: ${id}）`}
         visible={visible}
         onCancel={closeCompanyModal}
         wrapClassName="company-modal"
@@ -163,23 +163,23 @@ class CompanyModal extends PureComponent {
                 />
               )}
             </FormItem>
-            <Collapse bordered={true}>
-              <Panel header="其他" key="1">
-                <Link to={{ pathname: '/m/am/company', query: { company_id: id, status: 2 } }} target="_blank">
-                  查看该企业的认证信息
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/user_profiles', query: { company_id: id } }} target="_blank">
-                  查看该企业下的用户信息
-                </Link>
-                {'，'}
-                <Link to={{ pathname: '/m/um/jobs', query: { company_id: id } }} target="_blank">
-                  查看该企业下的岗位信息
-                </Link>
-              </Panel>
-            </Collapse>
           </Form>
         </Spin>
+        <Collapse bordered={true}>
+          <Panel header="其他" key="1">
+            <Link to={{ pathname: '/m/am/company', query: { company_id: id, status: 2 } }} target="_blank">
+              查看该企业的认证信息
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/user_profiles', query: { company_id: id } }} target="_blank">
+              查看该企业下的用户信息
+            </Link>
+            {'，'}
+            <Link to={{ pathname: '/m/um/jobs', query: { company_id: id } }} target="_blank">
+              查看该企业下的岗位信息
+            </Link>
+          </Panel>
+        </Collapse>
       </Modal>
     )
   }

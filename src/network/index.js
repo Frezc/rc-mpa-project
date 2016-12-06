@@ -17,9 +17,9 @@ export { api };
  */
 export async function easyFetch(url, params, needAuth = true) {
   if (needAuth) {
-    const headers = params.headers || new Headers();
+    const headers = params.headers || {};
     const { token } = await auth.getAuth();
-    headers.set('Authorization', `Bearer ${token}`);
+    headers.Authorization = `Bearer ${token}`;
     params.headers = headers;
   }
 
@@ -105,6 +105,23 @@ export function easyPost(url, params, needAuth = true) {
     method: 'POST',
     mode: 'cors',
     body: constructFormData(params)
+  }, needAuth);
+}
+
+/**
+ * post json
+ * @param url
+ * @param params
+ * @param needAuth
+ */
+export function easyJsonPost(url, params, needAuth = true) {
+  return easyFetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params)
   }, needAuth);
 }
 

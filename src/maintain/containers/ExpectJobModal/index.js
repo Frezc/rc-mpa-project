@@ -72,7 +72,7 @@ class ExpectJobModal extends PureComponent {
     const token = auth.getToken();
     return (
       <Modal
-        title="公开简历信息"
+        title={`公开简历信息（id: ${id}）`}
         visible={visible}
         onCancel={closeExpectJobModal}
         wrapClassName="expect-job-modal"

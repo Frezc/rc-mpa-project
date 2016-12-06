@@ -4,7 +4,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import api from '../../../network/api';
 import Clickable from '../../../components/Clickable';
-import { Modal } from 'antd';
+import { Modal, Icon } from 'antd';
 import auth from '../../configs/jwtAuth';
 
 import './style.scss';
@@ -34,7 +34,9 @@ class AppHeader extends PureComponent {
         <div className="abstract-profile">
           <img src={avatar ? api.host + avatar : require('../../../../assets/avatar.jpg')} alt="头像"/>
           <span>{nickname}</span>
-          <Clickable style={{ marginLeft: 16 }} onClick={this.handleLogout}>注销</Clickable>
+          <Clickable style={{ marginLeft: 16 }} onClick={this.handleLogout}>
+            <Icon type="logout" style={{ fontSize: 24, color: 'rosybrown' }}/>
+          </Clickable>
         </div>
       </div>
     )

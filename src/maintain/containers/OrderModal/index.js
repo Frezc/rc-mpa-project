@@ -51,7 +51,7 @@ class ExpectJobModal extends PureComponent {
 
     return (
       <Modal
-        title="订单信息"
+        title={`订单信息（id: ${id}）`}
         visible={visible}
         wrapClassName="order-modal"
         confirmLoading={confirmLoading}
