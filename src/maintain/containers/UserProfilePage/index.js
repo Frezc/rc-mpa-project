@@ -187,7 +187,7 @@ class UserProfilePage extends PureComponent {
 
   render() {
     const { location, push } = this.props;
-    const { showLogs, showUserId, selecting } = this.state;
+    const { selecting } = this.state;
 
     return (
       <div style={{ margin: 16, position: 'relative' }}>
@@ -202,14 +202,6 @@ class UserProfilePage extends PureComponent {
           push={push}
           rowSelection={selecting ? this.rowSelection : null}
         />
-        {/*<Modal*/}
-          {/*title="操作记录"*/}
-          {/*visible={showLogs}*/}
-          {/*onCancel={this.handleModalCancel}*/}
-          {/*footer={<Button size="large" type="primary" onClick={this.handleModalCancel}>OK</Button>}*/}
-        {/*>*/}
-          {/*<OperationLogs userId={showUserId}/>*/}
-        {/*</Modal>*/}
         {this.renderOtherAction()}
       </div>
     )
