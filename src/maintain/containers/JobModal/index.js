@@ -4,13 +4,14 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { easyGet, api, easyPost } from '../../../network';
-import { Modal, message, Spin, Form, Input, Radio, Collapse, Switch, Table } from 'antd';
-const FormItem = Form.Item;
-const { Group: RadioGroup, Button: RadioButton } = Radio;
-const Panel = Collapse.Panel;
-import { closeJobModal } from '../../actions/common';
+import { Modal, message, Spin, Form, Input, Radio, Collapse, Switch, Select } from 'antd';
+import { closeJobModal, loadJobTypes } from '../../actions/common';
 import { Link } from 'react-router';
 import { formItemLayout } from '../../configs/constants';
+
+const FormItem = Form.Item;
+const Panel = Collapse.Panel;
+const { Group: RadioGroup, Button: RadioButton } = Radio;
 
 import './style.scss';
 
@@ -47,6 +48,11 @@ class JobModal extends PureComponent {
     });
   };
 
+  componentWillMount() {
+    const { types, loadJobTypes } = this.props;
+    if (types.length == 0) loadJobTypes();
+  }
+
   componentWillReceiveProps({ visible, id }) {
     if (visible && id > 0 && id != this.props.id) {
       this.setState({ loading: true });
@@ -61,9 +67,9 @@ class JobModal extends PureComponent {
   }
 
   render() {
-    const { visible, closeJobModal, form, id } = this.props;
+    const { visible, closeJobModal, form, id, types } = this.props;
     const { data, loading, confirmLoading } = this.state;
-    const { name, pay_way, description, active, contact } = data;
+    const { name, pay_way, description, active, contact, type, city, address, contact_person } = data;
     const { getFieldDecorator } = form;
 
     return (
@@ -92,6 +98,37 @@ class JobModal extends PureComponent {
             </FormItem>
             <FormItem
               {...formItemLayout}
+              label="类型"
+            >
+              {getFieldDecorator('type', {
+                initialValue: type
+              })(
+                <Select style={{ width: 120 }}>
+                  {types.map(type =>
+                    <Option value={type} key={type}>{type}</Option>
+                  )}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="城市"
+            >
+              {city}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="地址"
+              hasFeedback
+            >
+              {getFieldDecorator('address', {
+                initialValue: address
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
               label="支付方式"
             >
               {getFieldDecorator('pay_way', {
@@ -110,6 +147,17 @@ class JobModal extends PureComponent {
             >
               {getFieldDecorator('contact', {
                 initialValue: contact
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="联系人"
+              hasFeedback
+            >
+              {getFieldDecorator('contact_person', {
+                initialValue: contact_person
               })(
                 <Input />
               )}
@@ -155,7 +203,10 @@ class JobModal extends PureComponent {
 }
 
 function select(state, ownProps) {
-  return state.jobModal;
+  return {
+    ...state.jobModal,
+    types: state.jobTypes
+  };
 }
 
-export default connect(select, { closeJobModal })(Form.create()(JobModal));
+export default connect(select, { closeJobModal, loadJobTypes })(Form.create()(JobModal));

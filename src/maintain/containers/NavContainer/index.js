@@ -89,7 +89,7 @@ class NavContainer extends React.Component {
               <Menu.Item key="companies">企业信息</Menu.Item>
               <Menu.Item key="jobs">岗位信息</Menu.Item>
               <Menu.Item key="orders">订单信息</Menu.Item>
-              <Menu.Item key="expect_jobs">公开简历信息</Menu.Item>
+              <Menu.Item key="expect_jobs">求职信息</Menu.Item>
               <Menu.Item key="job_evaluates">评价信息</Menu.Item>
             </SubMenu>
             <SubMenu key="am" title="申请处理">

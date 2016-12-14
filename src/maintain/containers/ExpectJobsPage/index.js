@@ -10,7 +10,7 @@ import { showUserDetail, showExpectJobModal } from '../../actions/common';
 import Clickable from '../../../components/Clickable';
 import Filters from '../../components/Filters';
 import { modelExist } from '../../configs/constants';
-import { message, Modal } from 'antd';
+import { message, Modal, Table } from 'antd';
 
 class ExpectJobsPage extends PureComponent {
 
@@ -47,6 +47,10 @@ class ExpectJobsPage extends PureComponent {
       title: '学校',
       dataIndex: 'school',
       key: 'school'
+    }, {
+      title: '城市',
+      dataIndex: 'city',
+      key: 'city'
     }, {
       title: '期望工作地点',
       dataIndex: 'expect_location',
@@ -125,8 +129,36 @@ class ExpectJobsPage extends PureComponent {
     }
   }
 
+  expandedRowRender = ({ expect_time }) => {
+    if (expect_time.length > 0) {
+      return (
+        <Table
+          columns={[{
+            title: 'id',
+            dataIndex: 'id',
+            key: 'id'
+          }, {
+            title: '开始时间',
+            dataIndex: 'start_at',
+            key: 'start_at'
+          }, {
+            title: '结束时间',
+            dataIndex: 'end_at',
+            key: 'end_at'
+          }]}
+          dataSource={expect_time}
+          pagination={false}
+          rowKey={record => record.id}
+          size="middle"
+        />
+      )
+    } else {
+      return '没有设置期望时间'
+    }
+  };
+
   render() {
-    const { location, push } = this.props
+    const { location, push } = this.props;
 
     return (
       <div style={{ margin: 16 }}>
@@ -139,6 +171,7 @@ class ExpectJobsPage extends PureComponent {
           location={location}
           push={push}
           onRowClick={this.handleRowClick}
+          expandedRowRender={this.expandedRowRender}
         />
       </div>
     )

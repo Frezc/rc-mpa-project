@@ -26,7 +26,8 @@ const api = {
   data: host + '/data',
   reports: host + '/reports',
   boss_umsg: host + '/boss/umsg',
-  evaluates: host + '/evaluates'
+  evaluates: host + '/evaluates',
+  job_types: host + '/job_types'
 };
 
 export default api;

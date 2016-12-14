@@ -1,6 +1,7 @@
 /**
  * Created by admin on 2016/10/13.
  */
+import { easyGet, api } from '../../network';
 
 export const SET_LOGON_USER = 'SET_LOGON_USER';
 export const LOGOUT = 'LOGOUT';
@@ -14,6 +15,7 @@ export const SHOW_EXPECT_JOB_MODAL = 'SHOW_EXPECT_JOB_MODAL';
 export const CLOSE_EXPECT_JOB_MODAL = 'CLOSE_EXPECT_JOB_MODAL';
 export const SHOW_ORDER_MODAL = 'SHOW_ORDER_MODAL';
 export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
+export const LOADED_JOB_TYPES = 'LOADED_JOB_TYPES';
 
 export function setLogonUser(user) {
   return {
@@ -91,4 +93,15 @@ export function closeOrderModal() {
   return {
     type: CLOSE_ORDER_MODAL
   }
+}
+
+export function loadJobTypes() {
+  return (dispatch) =>
+    easyGet(api.job_types, null, false)
+      .then(types => {
+        dispatch({
+          type: LOADED_JOB_TYPES,
+          payload: types
+        });
+      });
 }

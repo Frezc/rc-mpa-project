@@ -6,16 +6,23 @@ import { connect } from 'react-redux';
 import WrapTable from '../../components/WrapTable';
 import { api, easyDelete, easyPost } from '../../../network';
 import { push } from 'react-router-redux';
-import { showUserDetail, showCompanyModal, showJobModal } from '../../actions/common';
+import { showUserDetail, showCompanyModal, showJobModal, loadJobTypes } from '../../actions/common';
 import Clickable from '../../../components/Clickable';
 import { Tooltip, Modal, message } from 'antd';
 import Filters from '../../components/Filters';
 import { modelExist } from '../../configs/constants';
+import JobTimeModal from '../JobTimeModal';
 
 class JobsPage extends PureComponent {
 
+  state = {
+    jobTimeModal: {
+      visible: false
+    }
+  };
+
   get columns() {
-    const { exist } = this.props.location.query;
+    const { exist, type } = this.props.location.query;
 
     return [{
       title: 'id',
@@ -26,6 +33,10 @@ class JobsPage extends PureComponent {
       dataIndex: 'name',
       key: 'name'
     }, {
+      title: '类型',
+      dataIndex: 'type',
+      key: 'type'
+    }, {
       title: '发布者',
       dataIndex: 'owner',
       key: 'owner',
@@ -34,6 +45,14 @@ class JobsPage extends PureComponent {
       title: '联系方式',
       dataIndex: 'contact',
       key: 'contact'
+    }, {
+      title: '城市',
+      dataIndex: 'city',
+      key: 'city'
+    }, {
+      title: '地址',
+      dataIndex: 'address',
+      key: 'address'
     }, {
       title: '访问次数',
       dataIndex: 'visited',
@@ -87,35 +106,52 @@ class JobsPage extends PureComponent {
         .then(json => {
           message.success('恢复成功');
           this.table.setLocalData(index, json);
-        }).catch(() => {})
+        }).catch(() => {
+        })
     })
   }
 
-  renderAction({ id, deleted_at }, index) {
-    if (deleted_at) {
-      return (
-        <Clickable
-          onClick={e => {
-            e.stopPropagation();
-            this.handleRestore(id, index);
-          }}
-        >
-          恢复
-        </Clickable>
-      )
-    } else {
-      return (
-        <Clickable
-          style={{ color: 'red' }}
-          onClick={e => {
-            e.stopPropagation();
-            this.handleDelete(id, index);
-          }}
-        >
-          删除
-        </Clickable>
-      )
+  componentWillMount() {
+    const { loadJobTypes, types } = this.props;
+    if (types.length == 0) {
+      loadJobTypes();
     }
+  }
+
+  renderAction({ id, deleted_at }, index) {
+
+    return (
+      <span>
+        <Clickable
+          onClick={e => {
+            e.stopPropagation();
+            this.setState({ jobTimeModal: { visible: true, id } });
+          }}
+        >
+          查看时间
+        </Clickable>
+        <span className="ant-divider"/>
+        {deleted_at ?
+          <Clickable
+            onClick={e => {
+              e.stopPropagation();
+              this.handleRestore(id, index);
+            }}
+          >
+            恢复
+          </Clickable> :
+          <Clickable
+            style={{ color: 'red' }}
+            onClick={e => {
+              e.stopPropagation();
+              this.handleDelete(id, index);
+            }}
+          >
+            删除
+          </Clickable>
+        }
+      </span>
+    );
   }
 
   renderOwner = (_, record) => {
@@ -145,11 +181,16 @@ class JobsPage extends PureComponent {
   };
 
   render() {
-    const { location, push } = this.props
+    const { location, push, types } = this.props;
+    const { jobTimeModal } = this.state;
 
     return (
       <div style={{ margin: 16 }}>
-        <Filters style={{ marginBottom: 8 }} filters={['kw']}/>
+        <Filters
+          style={{ marginBottom: 8 }}
+          filters={['kw', 'type']}
+          types={types}
+        />
         <WrapTable
           ref={r => this.table = r}
           columns={this.columns}
@@ -159,6 +200,10 @@ class JobsPage extends PureComponent {
           push={push}
           onRowClick={this.handleRowClick}
         />
+        <JobTimeModal
+          {...jobTimeModal}
+          onCancel={() => this.setState({ jobTimeModal: { visible: false } })}
+        />
       </div>
     )
   }
@@ -166,8 +211,9 @@ class JobsPage extends PureComponent {
 
 function select(state, ownProps) {
   return {
-    location: state.router.locationBeforeTransitions
+    location: state.router.locationBeforeTransitions,
+    types: state.jobTypes
   }
 }
 
-export default connect(select, { push, showUserDetail, showCompanyModal, showJobModal })(JobsPage);
+export default connect(select, { push, showUserDetail, showCompanyModal, showJobModal, loadJobTypes })(JobsPage);
